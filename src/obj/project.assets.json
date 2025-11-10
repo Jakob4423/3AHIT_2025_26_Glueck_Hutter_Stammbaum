@@ -8,19 +8,19 @@
     "net9.0": []
   },
   "packageFolders": {
-    "C:\\Users\\hutte\\.nuget\\packages\\": {}
+    "C:\\Users\\Jakob Glück\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\hutte\\Desktop\\HTLCS\\ITP_Projekt\\src\\ITPHG.Models.csproj",
+      "projectUniqueName": "C:\\Schule\\itp2\\Waisenkinder_hutter_glueck\\3AHIT_2025_26_Glueck_Hutter_Stammbaum\\src\\ITPHG.Models.csproj",
       "projectName": "ITPHG.Models",
-      "projectPath": "C:\\Users\\hutte\\Desktop\\HTLCS\\ITP_Projekt\\src\\ITPHG.Models.csproj",
-      "packagesPath": "C:\\Users\\hutte\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\hutte\\Desktop\\HTLCS\\ITP_Projekt\\src\\obj\\",
+      "projectPath": "C:\\Schule\\itp2\\Waisenkinder_hutter_glueck\\3AHIT_2025_26_Glueck_Hutter_Stammbaum\\src\\ITPHG.Models.csproj",
+      "packagesPath": "C:\\Users\\Jakob Glück\\.nuget\\packages\\",
+      "outputPath": "C:\\Schule\\itp2\\Waisenkinder_hutter_glueck\\3AHIT_2025_26_Glueck_Hutter_Stammbaum\\src\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\hutte\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "C:\\Users\\Jakob Glück\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net9.0"
@@ -44,7 +44,7 @@
         "auditLevel": "low",
         "auditMode": "direct"
       },
-      "SdkAnalysisLevel": "9.0.100"
+      "SdkAnalysisLevel": "9.0.300"
     },
     "frameworks": {
       "net9.0": {
@@ -65,7 +65,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.102/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.306/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

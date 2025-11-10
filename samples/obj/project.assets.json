@@ -1,26 +1,45 @@
 {
   "version": 3,
   "targets": {
-    "net9.0": {}
+    "net9.0": {
+      "ITPHG.Models/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v9.0",
+        "compile": {
+          "bin/placeholder/ITPHG.Models.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/ITPHG.Models.dll": {}
+        }
+      }
+    }
   },
-  "libraries": {},
+  "libraries": {
+    "ITPHG.Models/1.0.0": {
+      "type": "project",
+      "path": "../src/ITPHG.Models.csproj",
+      "msbuildProject": "../src/ITPHG.Models.csproj"
+    }
+  },
   "projectFileDependencyGroups": {
-    "net9.0": []
+    "net9.0": [
+      "ITPHG.Models >= 1.0.0"
+    ]
   },
   "packageFolders": {
-    "C:\\Users\\hutte\\.nuget\\packages\\": {}
+    "C:\\Users\\Jakob Glück\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\hutte\\Desktop\\HTLCS\\ITP_Projekt\\samples\\ITPHGApp.csproj",
+      "projectUniqueName": "C:\\Schule\\itp2\\Waisenkinder_hutter_glueck\\3AHIT_2025_26_Glueck_Hutter_Stammbaum\\samples\\ITPHGApp.csproj",
       "projectName": "ITPHGApp",
-      "projectPath": "C:\\Users\\hutte\\Desktop\\HTLCS\\ITP_Projekt\\samples\\ITPHGApp.csproj",
-      "packagesPath": "C:\\Users\\hutte\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\hutte\\Desktop\\HTLCS\\ITP_Projekt\\samples\\obj\\",
+      "projectPath": "C:\\Schule\\itp2\\Waisenkinder_hutter_glueck\\3AHIT_2025_26_Glueck_Hutter_Stammbaum\\samples\\ITPHGApp.csproj",
+      "packagesPath": "C:\\Users\\Jakob Glück\\.nuget\\packages\\",
+      "outputPath": "C:\\Schule\\itp2\\Waisenkinder_hutter_glueck\\3AHIT_2025_26_Glueck_Hutter_Stammbaum\\samples\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\hutte\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "C:\\Users\\Jakob Glück\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net9.0"
@@ -31,7 +50,11 @@
       "frameworks": {
         "net9.0": {
           "targetAlias": "net9.0",
-          "projectReferences": {}
+          "projectReferences": {
+            "C:\\Schule\\itp2\\Waisenkinder_hutter_glueck\\3AHIT_2025_26_Glueck_Hutter_Stammbaum\\src\\ITPHG.Models.csproj": {
+              "projectPath": "C:\\Schule\\itp2\\Waisenkinder_hutter_glueck\\3AHIT_2025_26_Glueck_Hutter_Stammbaum\\src\\ITPHG.Models.csproj"
+            }
+          }
         }
       },
       "warningProperties": {
@@ -44,7 +67,7 @@
         "auditLevel": "low",
         "auditMode": "direct"
       },
-      "SdkAnalysisLevel": "9.0.100"
+      "SdkAnalysisLevel": "9.0.300"
     },
     "frameworks": {
       "net9.0": {
@@ -65,7 +88,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.102/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.306/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

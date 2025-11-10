@@ -1,14 +1,65 @@
 ﻿namespace ITPHG.Models;
 
+
 public class User
 {
-    private string _name;
-    private int _age;
+    private Guid _id = Guid.NewGuid();
 
-    public User(string name, int age)
+    private string _email;
+
+    private string _passwordHash;
+
+    private string _name;
+
+
+    public Guid Id
     {
-        _name = name;
-        _age = age;
+        get
+        {
+            return _id;
+        }
+        set
+        {
+            _id = value;
+        }
     }
-    
+
+    public string Email
+    {
+        get
+        {
+            return _email;
+        }
+
+        set
+        {
+            _email = value;
+        }
+    }
+
+    public string PasswordHash
+    {
+        get
+        {
+            return _passwordHash;
+        }
+
+        set
+        {
+            _passwordHash = value;
+        }
+    }
+
+    public string Name
+    {
+        get
+        {
+            return _name;
+        }
+        set
+        {
+            _name = value;
+        }
+    }
+
 }
