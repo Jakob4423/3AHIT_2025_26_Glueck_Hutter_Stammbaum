@@ -1,0 +1,15 @@
+C:\Schule\itp2\Waisenkinder_hutter_glueck\3AHIT_2025_26_Glueck_Hutter_Stammbaum\Waisenkinder\Data\bin\Debug\net8.0\Data.deps.json
+C:\Schule\itp2\Waisenkinder_hutter_glueck\3AHIT_2025_26_Glueck_Hutter_Stammbaum\Waisenkinder\Data\bin\Debug\net8.0\Data.runtimeconfig.json
+c:\Schule\itp2\Waisenkinder_hutter_glueck\3AHIT_2025_26_Glueck_Hutter_Stammbaum\Waisenkinder\Data\bin\Debug\net8.0\Data.dll
+c:\Schule\itp2\Waisenkinder_hutter_glueck\3AHIT_2025_26_Glueck_Hutter_Stammbaum\Waisenkinder\Data\bin\Debug\net8.0\Data.pdb
+c:\Schule\itp2\Waisenkinder_hutter_glueck\3AHIT_2025_26_Glueck_Hutter_Stammbaum\Waisenkinder\Data\obj\Debug\net8.0\Data.csproj.AssemblyReference.cache
+c:\Schule\itp2\Waisenkinder_hutter_glueck\3AHIT_2025_26_Glueck_Hutter_Stammbaum\Waisenkinder\Data\obj\Debug\net8.0\Data.GeneratedMSBuildEditorConfig.editorconfig
+c:\Schule\itp2\Waisenkinder_hutter_glueck\3AHIT_2025_26_Glueck_Hutter_Stammbaum\Waisenkinder\Data\obj\Debug\net8.0\Data.AssemblyInfoInputs.cache
+c:\Schule\itp2\Waisenkinder_hutter_glueck\3AHIT_2025_26_Glueck_Hutter_Stammbaum\Waisenkinder\Data\obj\Debug\net8.0\Data.AssemblyInfo.cs
+c:\Schule\itp2\Waisenkinder_hutter_glueck\3AHIT_2025_26_Glueck_Hutter_Stammbaum\Waisenkinder\Data\obj\Debug\net8.0\Data.csproj.CoreCompileInputs.cache
+c:\Schule\itp2\Waisenkinder_hutter_glueck\3AHIT_2025_26_Glueck_Hutter_Stammbaum\Waisenkinder\Data\obj\Debug\net8.0\Data.sourcelink.json
+c:\Schule\itp2\Waisenkinder_hutter_glueck\3AHIT_2025_26_Glueck_Hutter_Stammbaum\Waisenkinder\Data\obj\Debug\net8.0\Data.dll
+c:\Schule\itp2\Waisenkinder_hutter_glueck\3AHIT_2025_26_Glueck_Hutter_Stammbaum\Waisenkinder\Data\obj\Debug\net8.0\refint\Data.dll
+c:\Schule\itp2\Waisenkinder_hutter_glueck\3AHIT_2025_26_Glueck_Hutter_Stammbaum\Waisenkinder\Data\obj\Debug\net8.0\Data.pdb
+C:\Schule\itp2\Waisenkinder_hutter_glueck\3AHIT_2025_26_Glueck_Hutter_Stammbaum\Waisenkinder\Data\obj\Debug\net8.0\Data.genruntimeconfig.cache
+C:\Schule\itp2\Waisenkinder_hutter_glueck\3AHIT_2025_26_Glueck_Hutter_Stammbaum\Waisenkinder\Data\obj\Debug\net8.0\ref\Data.dll

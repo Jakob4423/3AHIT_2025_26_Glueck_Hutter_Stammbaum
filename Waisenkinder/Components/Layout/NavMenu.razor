@@ -1,0 +1,31 @@
+﻿@using Microsoft.AspNetCore.Components.Authorization
+@inject ITP2Tree.Services.AuthService Auth
+@inject NavigationManager Nav
+
+<AuthorizeView>
+    <Authorized Context="authContext">
+        <div class="nav-item px-3">
+            <a class="nav-link" href="/protected">Hallo @authContext.User.Identity?.Name!</a>
+        </div>
+        <div class="nav-item px-3">
+            <button class="btn btn-link nav-link" @onclick="Logout">Logout</button>
+        </div>
+    </Authorized>
+
+    <NotAuthorized>
+        <div class="nav-item px-3">
+            <a class="nav-link" href="/login">Login</a>
+        </div>
+        <div class="nav-item px-3">
+            <a class="nav-link" href="/register">Registrieren</a>
+        </div>
+    </NotAuthorized>
+</AuthorizeView>
+
+@code {
+    private void Logout()
+    {
+        Auth.SignOut();
+        Nav.NavigateTo("/");
+    }
+}

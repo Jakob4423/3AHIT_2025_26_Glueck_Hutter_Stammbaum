@@ -1,0 +1,64 @@
+@page "/register"
+@using ITP2Tree.Data
+@using System.ComponentModel.DataAnnotations
+@inject AppDBContext Db
+@inject NavigationManager Nav
+
+<h3>Registrieren</h3>
+
+<EditForm Model="registerModel" OnValidSubmit="HandleRegister">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <div class="mb-2">
+        <label>E-Mail</label>
+        <InputText @bind-Value="registerModel.Email" class="form-control" />
+        <ValidationMessage For="() => registerModel.Email" />
+    </div>
+    <div class="mb-2">
+        <label>Name</label>
+        <InputText @bind-Value="registerModel.Name" class="form-control" />
+        <ValidationMessage For="() => registerModel.Name" />
+    </div>
+    <div class="mb-2">
+        <label>Passwort</label>
+        <InputText @bind-Value="registerModel.Password" Type="password" class="form-control" />
+        <small class="text-muted">Mindestens 8 Zeichen.</small>
+        <ValidationMessage For="() => registerModel.Password" />
+    </div>
+    <button class="btn btn-primary" type="submit">Registrieren</button>
+</EditForm>
+
+@code {
+    private RegisterModel registerModel = new();
+
+    public class RegisterModel
+    {
+        [Required(ErrorMessage = "E-Mail ist erforderlich.")]
+        [EmailAddress(ErrorMessage = "Ungültige E-Mail-Adresse.")]
+        public string Email { get; set; } = string.Empty;
+
+        [Required(ErrorMessage = "Name ist erforderlich.")]
+        [RegularExpression(@"^[A-Za-zÄÖÜäöüß\s\-]+$", ErrorMessage = "Name darf nur Buchstaben, Leerzeichen und Bindestriche enthalten.")]
+        public string Name { get; set; } = string.Empty;
+
+        [Required(ErrorMessage = "Passwort ist erforderlich.")]
+        [MinLength(8, ErrorMessage = "Passwort muss mindestens 8 Zeichen enthalten.")]
+        public string Password { get; set; } = string.Empty;
+    }
+
+    private async Task HandleRegister()
+    {
+        // Build Benutzer entity and hash password
+        var user = new Benutzer
+        {
+            Email = registerModel.Email,
+            Name = registerModel.Name,
+            PasswortHash = BCrypt.Net.BCrypt.HashPassword(registerModel.Password)
+        };
+
+        Db.Benutzer.Add(user);
+        await Db.SaveChangesAsync();
+
+        Nav.NavigateTo("/login");
+    }
+}

@@ -1,0 +1,5 @@
+C:\Schule\itp2\Waisenkinder_hutter_glueck\3AHIT_2025_26_Glueck_Hutter_Stammbaum\Waisenkinder\Data\obj\Debug\net9.0\Data.GeneratedMSBuildEditorConfig.editorconfig
+C:\Schule\itp2\Waisenkinder_hutter_glueck\3AHIT_2025_26_Glueck_Hutter_Stammbaum\Waisenkinder\Data\obj\Debug\net9.0\Data.AssemblyInfoInputs.cache
+C:\Schule\itp2\Waisenkinder_hutter_glueck\3AHIT_2025_26_Glueck_Hutter_Stammbaum\Waisenkinder\Data\obj\Debug\net9.0\Data.AssemblyInfo.cs
+C:\Schule\itp2\Waisenkinder_hutter_glueck\3AHIT_2025_26_Glueck_Hutter_Stammbaum\Waisenkinder\Data\obj\Debug\net9.0\Data.csproj.CoreCompileInputs.cache
+C:\Schule\itp2\Waisenkinder_hutter_glueck\3AHIT_2025_26_Glueck_Hutter_Stammbaum\Waisenkinder\Data\obj\Debug\net9.0\Data.sourcelink.json

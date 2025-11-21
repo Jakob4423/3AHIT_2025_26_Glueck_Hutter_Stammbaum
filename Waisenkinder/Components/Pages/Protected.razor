@@ -1,0 +1,152 @@
+@page "/protected"
+@using ITP2Tree.Data
+@using Microsoft.EntityFrameworkCore
+@using Microsoft.AspNetCore.Components.Forms
+@inject AppDBContext Db
+@inject ITP2Tree.Services.AuthService Auth
+@inject NavigationManager NavigationManager
+
+@if (Auth.UserId is null)
+{
+    <p>Du bist nicht eingeloggt. Bitte <a href="/login">einloggen</a>.</p>
+}
+else if (user == null)
+{
+    <p>Lade Benutzerdaten...</p>
+}
+else
+{
+    <h3>Willkommen, @user.Name</h3>
+    <p>E-Mail: @user.Email</p>
+    <button class="btn btn-secondary" @onclick="Logout">Logout</button>
+}
+
+@if (Auth.UserId is not null && user is not null)
+{
+    <hr />
+    <h4>Familienmitglieder hinzufügen</h4>
+    <EditForm EditContext="personEditContext" OnValidSubmit="HandleAddPerson">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <div class="mb-2">
+            <label>Name</label>
+            <InputText @bind-Value="newPerson.Name" class="form-control" />
+            <ValidationMessage For="() => newPerson.Name" />
+        </div>
+        <div class="mb-2">
+            <label>Geburtsort</label>
+            <InputText @bind-Value="newPerson.Geburtsort" class="form-control" />
+            <ValidationMessage For="() => newPerson.Geburtsort" />
+        </div>
+        <div class="mb-2">
+            <label>Geburtsdatum</label>
+            <InputText @bind-Value="newPerson.Geburtsdatum" class="form-control" />
+            <ValidationMessage For="() => newPerson.Geburtsdatum" />
+        </div>
+        <div class="mb-2">
+            <label>Bekannte Verwandte (Komma-getrennt)</label>
+            <InputText @bind-Value="newPerson.Verwandte" class="form-control" />
+            <ValidationMessage For="() => newPerson.Verwandte" />
+        </div>
+        <div class="mb-2">
+            <label>Notizen</label>
+            <InputTextArea @bind-Value="newPerson.Notizen" class="form-control" />
+        </div>
+
+        <button class="btn btn-primary" type="submit">Hinzufügen</button>
+    </EditForm>
+
+    <hr />
+    <h4>Deine Personen</h4>
+    @if (persons is null || persons.Count == 0)
+    {
+        <p>Keine Personen vorhanden.</p>
+    }
+    else
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Geburtsort</th>
+                    <th>Geburtsdatum</th>
+                    <th>Verwandte</th>
+                    <th>Notizen</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var p in persons)
+                {
+                    <tr>
+                        <td>@p.Name</td>
+                        <td>@p.Geburtsort</td>
+                        <td>@p.Geburtsdatum</td>
+                        <td>@p.Verwandte</td>
+                        <td>@p.Notizen</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+}
+
+@code {
+    private Benutzer? user;
+    private Person newPerson = new();
+    private List<Person>? persons;
+    private EditContext? personEditContext;
+    private ValidationMessageStore? validationMessageStore;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (Auth.UserId is not null)
+        {
+            user = await Db.Benutzer.FindAsync(Auth.UserId.Value);
+            // load user's Personen
+            persons = await Db.Personen.Where(p => p.BenutzerId == Auth.UserId.Value).ToListAsync();
+            personEditContext = new EditContext(newPerson);
+            validationMessageStore = new ValidationMessageStore(personEditContext);
+        }
+    }
+
+    private void Logout()
+    {
+        Auth.SignOut();
+        NavigationManager.NavigateTo("/");
+    }
+
+    private async Task HandleAddPerson()
+    {
+        // Clear previous messages
+        validationMessageStore?.Clear();
+
+        // Count non-empty fields among the five information fields
+        var filled = 0;
+        if (!string.IsNullOrWhiteSpace(newPerson.Name)) filled++;
+        if (!string.IsNullOrWhiteSpace(newPerson.Geburtsort)) filled++;
+        if (!string.IsNullOrWhiteSpace(newPerson.Geburtsdatum)) filled++;
+        if (!string.IsNullOrWhiteSpace(newPerson.Verwandte)) filled++;
+        if (!string.IsNullOrWhiteSpace(newPerson.Notizen)) filled++;
+
+        if (filled < 5)
+        {
+            var field = new FieldIdentifier(newPerson, nameof(newPerson.Name));
+            validationMessageStore?.Add(field, "Bitte mindestens fünf Informationen eingeben (fülle alle Felder).\n");
+            personEditContext?.NotifyValidationStateChanged();
+            return;
+        }
+
+        // assign owner and save
+        newPerson.BenutzerId = Auth.UserId!.Value;
+        Db.Personen.Add(newPerson);
+        await Db.SaveChangesAsync();
+
+        // reload list and reset form
+        persons = await Db.Personen.Where(p => p.BenutzerId == Auth.UserId.Value).ToListAsync();
+        newPerson = new Person();
+        personEditContext = new EditContext(newPerson);
+        validationMessageStore = new ValidationMessageStore(personEditContext);
+        StateHasChanged();
+    }
+}
