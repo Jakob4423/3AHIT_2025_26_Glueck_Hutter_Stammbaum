@@ -210,14 +210,16 @@ else
 
     private async Task OnDeletePerson(Person p)
     {
+        await JS.InvokeVoidAsync("console.log", $"OnDeletePerson called for {p?.Name} (Id={p?.Id})");
         Db.Personen.Remove(p);
         await Db.SaveChangesAsync();
         persons = await Db.Personen.Where(x => x.BenutzerId == Auth.UserId).ToListAsync();
         StateHasChanged();
     }
 
-    private void OpenEditModal(Person p)
+    private async Task OpenEditModal(Person p)
     {
+        await JS.InvokeVoidAsync("console.log", $"OpenEditModal called for {p?.Name} (Id={p?.Id})");
         // create a detached copy to edit
         editPerson = new Person
         {
@@ -234,6 +236,7 @@ else
 
     private async Task OnSaveEdited(Person p)
     {
+        await JS.InvokeVoidAsync("console.log", $"OnSaveEdited called for {p?.Name} (Id={p?.Id})");
         // attach and update
         var dbp = await Db.Personen.FindAsync(p.Id);
         if (dbp != null)
@@ -256,14 +259,16 @@ else
         editPerson = null;
     }
 
-    private void RequestDeletePerson(Person p)
+    private async Task RequestDeletePerson(Person p)
     {
+        await JS.InvokeVoidAsync("console.log", $"RequestDeletePerson called for {p?.Name} (Id={p?.Id})");
         personToDelete = p;
         showConfirmDelete = true;
     }
 
     private async Task ConfirmDelete()
     {
+        await JS.InvokeVoidAsync("console.log", $"ConfirmDelete called for {personToDelete?.Name} (Id={personToDelete?.Id})");
         if (personToDelete is not null)
         {
             await OnDeletePerson(personToDelete);
