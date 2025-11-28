@@ -7,6 +7,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ITP2Tree
 {
+    // DTOs for temporary test endpoints
+    public record CreateUserDto(string Email, string Name, string Password);
+    public record CreatePersonDto(int UserId, string Name, string Geburtsort, string Geburtsdatum, string Verwandte, string? Notizen);
+
     public class Program
     {
         public static void Main(string[] args)
@@ -45,8 +49,46 @@ namespace ITP2Tree
 
             app.UseRouting();
 
+            // Temporary test API endpoints for automated verification
+            app.MapPost("/api/test/create-user", async (AppDBContext db, CreateUserDto dto) =>
+            {
+                var user = new Benutzer
+                {
+                    Email = dto.Email,
+                    Name = dto.Name,
+                    PasswortHash = BCrypt.Net.BCrypt.HashPassword(dto.Password)
+                };
+                db.Benutzer.Add(user);
+                await db.SaveChangesAsync();
+                return Results.Ok(new { user.Id, user.Email, user.Name });
+            });
+
+            app.MapPost("/api/test/create-person", async (AppDBContext db, CreatePersonDto dto) =>
+            {
+                var person = new Person
+                {
+                    BenutzerId = dto.UserId,
+                    Name = dto.Name,
+                    Geburtsort = dto.Geburtsort,
+                    Geburtsdatum = dto.Geburtsdatum,
+                    Verwandte = dto.Verwandte,
+                    Notizen = dto.Notizen
+                };
+                db.Personen.Add(person);
+                await db.SaveChangesAsync();
+                return Results.Ok(new { person.Id });
+            });
+
+            app.MapGet("/api/test/list-persons/{userId:int}", async (AppDBContext db, int userId) =>
+            {
+                var list = await db.Personen.Where(p => p.BenutzerId == userId).ToListAsync();
+                return Results.Ok(list);
+            });
+
             app.MapBlazorHub();
             app.MapFallbackToPage("/_Host");
+
+            // DTOs are declared at namespace scope above
 
             app.Run();
         }

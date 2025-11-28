@@ -1,0 +1,93 @@
+@page "/tree"
+@using ITP2Tree.Data
+@using Microsoft.EntityFrameworkCore
+@inject AppDBContext Db
+@inject ITP2Tree.Services.AuthService Auth
+@inject NavigationManager NavigationManager
+@inject IJSRuntime JS
+
+<PageTitle>Stammbaum erstellen</PageTitle>
+
+@if (Auth.UserId is null)
+{
+    <p>Du bist nicht eingeloggt. Bitte <a href="/login">einloggen</a>.</p>
+}
+else //ebner war hier
+{
+    <h3>Stammbaum Editor</h3>
+    <p class="text-muted">Ziehe Knoten, positioniere sie und exportiere als SVG.</p>
+
+    @if (persons is null)
+    {
+        <p>Lade Personen …</p>
+    }
+    else if (persons.Count == 0)
+    {
+        <p class="text-muted">Keine Personen gefunden. Gehe zurück zu "Geschützte Seite" und füge welche hinzu.</p>
+    }
+    else
+    {
+        <div class="mb-3 d-flex gap-2">
+            <button class="btn btn-primary" @onclick="InitEditor">Editor aktivieren</button>
+            <button class="btn btn-outline-secondary" @onclick="ExportSvg">Export SVG</button>
+        </div>
+
+        <div class="card p-3">
+            <svg id="treeSvg" width="900" height="600" style="border:1px solid rgba(0,0,0,0.06); background:#fff;">
+                @foreach (var n in nodes)
+                {
+                    <g class="node" transform="translate(@n.X,@n.Y)" data-id="@n.Id">
+                        <rect x="-80" y="-18" width="160" height="36" rx="8" fill="#f3f6ff" stroke="#1e88ff" stroke-width="1" />
+                        <text x="0" y="6" font-family="Segoe UI, system-ui" font-size="14" text-anchor="middle" fill="#062b80">@n.Label</text>
+                    </g>
+                }
+            </svg>
+        </div>
+    }
+}
+
+@code {
+    private List<Person>? persons;
+    private List<Node> nodes = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (Auth.UserId is not null)
+        {
+            persons = await Db.Personen.Where(p => p.BenutzerId == Auth.UserId.Value).ToListAsync();
+            if (persons != null)
+            {
+                int i = 0;
+                foreach (var p in persons)
+                {
+                    nodes.Add(new Node { Id = p.Id, Label = p.Name ?? "(ohne Name)", X = 120 + (i % 4) * 220, Y = 60 + (i / 4) * 120 });
+                    i++;
+                }
+            }
+        }
+    }
+
+    private async Task InitEditor()
+    {
+        await JS.InvokeVoidAsync("TreeEditor.init", "treeSvg");
+    }
+
+    private async Task ExportSvg()
+    {
+        var svg = await JS.InvokeAsync<string>("TreeEditor.getSvgHtml", "treeSvg");
+        if (!string.IsNullOrEmpty(svg))
+        {
+            var href = "data:image/svg+xml;charset=utf-8," + Uri.EscapeDataString(svg);
+            // trigger download
+            await JS.InvokeVoidAsync("(function(h){var a=document.createElement('a');a.href=h;a.download='stammbaum.svg';document.body.appendChild(a);a.click();a.remove();})(" + "'" + href + "'" + ")");
+        }
+    }
+
+    private class Node
+    {
+        public int Id { get; set; }
+        public string Label { get; set; } = string.Empty;
+        public double X { get; set; }
+        public double Y { get; set; }
+    }
+}

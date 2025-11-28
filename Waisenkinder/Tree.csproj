@@ -4,6 +4,12 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
+  <!-- Disable apphost to avoid apphost.exe -> Tree.exe copy warnings when the app is running -->
+  <PropertyGroup>
+    <UseAppHost>false</UseAppHost>
+  </PropertyGroup>
+
+  <!-- (pre-build process-killing removed) -->
   <ItemGroup>
     <ProjectReference Include="Data\Data.csproj" />
   </ItemGroup>

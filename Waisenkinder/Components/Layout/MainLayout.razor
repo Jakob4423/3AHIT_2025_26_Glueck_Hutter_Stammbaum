@@ -1,4 +1,6 @@
 ﻿@inherits LayoutComponentBase
+@inject IJSRuntime JS
+@inject NavigationManager Nav
 
 <div class="page">
     <div class="sidebar">
@@ -6,8 +8,12 @@
     </div>
 
     <main>
-        <div class="top-row px-4">
-            <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
+        <div class="top-row px-4 d-flex align-items-center">
+            @if (showBack)
+            {
+                <button class="btn btn-link me-3" @onclick="GoBack" title="Zurück">←</button>
+            }
+            <!-- top-row content (right side) kept minimal -->
         </div>
 
         <article class="content px-4">
@@ -16,8 +22,19 @@
     </main>
 </div>
 
-<div id="blazor-error-ui" data-nosnippet>
-    An unhandled error has occurred.
-    <a href="." class="reload">Reload</a>
-    <span class="dismiss">🗙</span>
-</div>
+<!-- Blazor error UI removed: errors will be handled by the app's Error page -->
+
+@code {
+    private async Task GoBack()
+    {
+        await JS.InvokeVoidAsync("TreeEditor.goBack");
+    }
+    private bool showBack;
+
+    protected override void OnParametersSet()
+    {
+        // If the base-relative path is empty, we're on home — hide back button
+        var relative = Nav.ToBaseRelativePath(Nav.Uri);
+        showBack = !string.IsNullOrEmpty(relative);
+    }
+}

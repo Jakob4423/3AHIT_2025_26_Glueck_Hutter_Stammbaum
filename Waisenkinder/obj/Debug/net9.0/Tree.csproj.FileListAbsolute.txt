@@ -16,7 +16,6 @@ c:\Schule\itp2\Waisenkinder_hutter_glueck\3AHIT_2025_26_Glueck_Hutter_Stammbaum\
 c:\Schule\itp2\Waisenkinder_hutter_glueck\3AHIT_2025_26_Glueck_Hutter_Stammbaum\Waisenkinder\bin\Debug\net9.0\Data\obj\project.assets.json
 c:\Schule\itp2\Waisenkinder_hutter_glueck\3AHIT_2025_26_Glueck_Hutter_Stammbaum\Waisenkinder\bin\Debug\net9.0\Tree.staticwebassets.runtime.json
 c:\Schule\itp2\Waisenkinder_hutter_glueck\3AHIT_2025_26_Glueck_Hutter_Stammbaum\Waisenkinder\bin\Debug\net9.0\Tree.staticwebassets.endpoints.json
-c:\Schule\itp2\Waisenkinder_hutter_glueck\3AHIT_2025_26_Glueck_Hutter_Stammbaum\Waisenkinder\bin\Debug\net9.0\Tree.exe
 c:\Schule\itp2\Waisenkinder_hutter_glueck\3AHIT_2025_26_Glueck_Hutter_Stammbaum\Waisenkinder\bin\Debug\net9.0\BCrypt.Net-Next.dll
 c:\Schule\itp2\Waisenkinder_hutter_glueck\3AHIT_2025_26_Glueck_Hutter_Stammbaum\Waisenkinder\bin\Debug\net9.0\Microsoft.Data.Sqlite.dll
 c:\Schule\itp2\Waisenkinder_hutter_glueck\3AHIT_2025_26_Glueck_Hutter_Stammbaum\Waisenkinder\bin\Debug\net9.0\Microsoft.EntityFrameworkCore.dll
@@ -56,7 +55,6 @@ c:\Schule\itp2\Waisenkinder_hutter_glueck\3AHIT_2025_26_Glueck_Hutter_Stammbaum\
 c:\Schule\itp2\Waisenkinder_hutter_glueck\3AHIT_2025_26_Glueck_Hutter_Stammbaum\Waisenkinder\obj\Debug\net9.0\scopedcss\Components\Layout\NavMenu.razor.rz.scp.css
 c:\Schule\itp2\Waisenkinder_hutter_glueck\3AHIT_2025_26_Glueck_Hutter_Stammbaum\Waisenkinder\obj\Debug\net9.0\scopedcss\bundle\Tree.styles.css
 c:\Schule\itp2\Waisenkinder_hutter_glueck\3AHIT_2025_26_Glueck_Hutter_Stammbaum\Waisenkinder\obj\Debug\net9.0\scopedcss\projectbundle\Tree.bundle.scp.css
-c:\Schule\itp2\Waisenkinder_hutter_glueck\3AHIT_2025_26_Glueck_Hutter_Stammbaum\Waisenkinder\obj\Debug\net9.0\compressed\wansgf4xgc-khy4lop6wu.gz
 c:\Schule\itp2\Waisenkinder_hutter_glueck\3AHIT_2025_26_Glueck_Hutter_Stammbaum\Waisenkinder\obj\Debug\net9.0\compressed\uvcdyw578u-bqjiyaj88i.gz
 c:\Schule\itp2\Waisenkinder_hutter_glueck\3AHIT_2025_26_Glueck_Hutter_Stammbaum\Waisenkinder\obj\Debug\net9.0\compressed\slzffpt4x1-c2jlpeoesf.gz
 c:\Schule\itp2\Waisenkinder_hutter_glueck\3AHIT_2025_26_Glueck_Hutter_Stammbaum\Waisenkinder\obj\Debug\net9.0\compressed\l336o0lzfv-erw9l3u2r3.gz
@@ -101,8 +99,6 @@ c:\Schule\itp2\Waisenkinder_hutter_glueck\3AHIT_2025_26_Glueck_Hutter_Stammbaum\
 c:\Schule\itp2\Waisenkinder_hutter_glueck\3AHIT_2025_26_Glueck_Hutter_Stammbaum\Waisenkinder\obj\Debug\net9.0\compressed\jdsa475crq-h1s4sie4z3.gz
 c:\Schule\itp2\Waisenkinder_hutter_glueck\3AHIT_2025_26_Glueck_Hutter_Stammbaum\Waisenkinder\obj\Debug\net9.0\compressed\c2xgkdh7z3-63fj8s7r0e.gz
 c:\Schule\itp2\Waisenkinder_hutter_glueck\3AHIT_2025_26_Glueck_Hutter_Stammbaum\Waisenkinder\obj\Debug\net9.0\compressed\2wh3xfi55g-0j3bgjxly4.gz
-c:\Schule\itp2\Waisenkinder_hutter_glueck\3AHIT_2025_26_Glueck_Hutter_Stammbaum\Waisenkinder\obj\Debug\net9.0\compressed\ina7forj7v-ng607nun8h.gz
-c:\Schule\itp2\Waisenkinder_hutter_glueck\3AHIT_2025_26_Glueck_Hutter_Stammbaum\Waisenkinder\obj\Debug\net9.0\compressed\kx7afdy39b-ng607nun8h.gz
 c:\Schule\itp2\Waisenkinder_hutter_glueck\3AHIT_2025_26_Glueck_Hutter_Stammbaum\Waisenkinder\obj\Debug\net9.0\staticwebassets.build.json
 c:\Schule\itp2\Waisenkinder_hutter_glueck\3AHIT_2025_26_Glueck_Hutter_Stammbaum\Waisenkinder\obj\Debug\net9.0\staticwebassets.build.json.cache
 c:\Schule\itp2\Waisenkinder_hutter_glueck\3AHIT_2025_26_Glueck_Hutter_Stammbaum\Waisenkinder\obj\Debug\net9.0\staticwebassets.development.json
@@ -132,3 +128,8 @@ c:\Schule\itp2\Waisenkinder_hutter_glueck\3AHIT_2025_26_Glueck_Hutter_Stammbaum\
 c:\Schule\itp2\Waisenkinder_hutter_glueck\3AHIT_2025_26_Glueck_Hutter_Stammbaum\Waisenkinder\obj\Debug\net9.0\compressed\pf5u7hwa4t-b2n90fdu3c.gz
 c:\Schule\itp2\Waisenkinder_hutter_glueck\3AHIT_2025_26_Glueck_Hutter_Stammbaum\Waisenkinder\obj\Debug\net9.0\Tree.RazorAssemblyInfo.cache
 c:\Schule\itp2\Waisenkinder_hutter_glueck\3AHIT_2025_26_Glueck_Hutter_Stammbaum\Waisenkinder\obj\Debug\net9.0\Tree.RazorAssemblyInfo.cs
+C:\Schule\itp2\Waisenkinder_hutter_glueck\3AHIT_2025_26_Glueck_Hutter_Stammbaum\Waisenkinder\bin\Debug\net9.0\package.json
+C:\Schule\itp2\Waisenkinder_hutter_glueck\3AHIT_2025_26_Glueck_Hutter_Stammbaum\Waisenkinder\obj\Debug\net9.0\compressed\ina7forj7v-mqcvlwrtaf.gz
+C:\Schule\itp2\Waisenkinder_hutter_glueck\3AHIT_2025_26_Glueck_Hutter_Stammbaum\Waisenkinder\obj\Debug\net9.0\compressed\kx7afdy39b-mqcvlwrtaf.gz
+c:\Schule\itp2\Waisenkinder_hutter_glueck\3AHIT_2025_26_Glueck_Hutter_Stammbaum\Waisenkinder\obj\Debug\net9.0\compressed\wansgf4xgc-9cvxy7r26d.gz
+c:\Schule\itp2\Waisenkinder_hutter_glueck\3AHIT_2025_26_Glueck_Hutter_Stammbaum\Waisenkinder\obj\Debug\net9.0\compressed\szmcp5ficv-ekc1bgdubz.gz

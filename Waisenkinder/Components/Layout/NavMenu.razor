@@ -4,9 +4,7 @@
 
 <AuthorizeView>
     <Authorized Context="authContext">
-        <div class="nav-item px-3">
-            <a class="nav-link" href="/protected">Hallo @authContext.User.Identity?.Name!</a>
-        </div>
+        
         <div class="nav-item px-3">
             <button class="btn btn-link nav-link" @onclick="Logout">Logout</button>
         </div>

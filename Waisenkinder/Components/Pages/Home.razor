@@ -1,7 +1,70 @@
-﻿@page "/"
+﻿
+@page "/"
+
+@using ITP2Tree.Components.Shared
 
 <PageTitle>Home</PageTitle>
 
-<h1>Hello, world!</h1>
+<h1 class="display-5">Welcome to Waisenkinder.Tree</h1>
 
-Welcome to your new app.
+@if (showModal)
+{
+	<div class="modal-backdrop-custom" @onclick="CloseOnBackdrop">
+		<div class="modal-card" @onclick:stopPropagation>
+			<div class="d-flex mb-3 align-items-center">
+				<button class="me-2" @onclick="SelectRegister">Registrieren</button>
+				<button class="me-2" @onclick="SelectLogin">Login</button>
+				<button class="btn btn-sm btn-link ms-auto" @onclick="CloseModal">×</button>
+			</div>
+
+			<div>
+				@if (activeTab == "register")
+				{
+					<RegisterForm OnSuccess="OnRegistered" />
+				}
+				else
+				{
+					<LoginForm OnSuccess="OnLoggedIn" />
+				}
+			</div>
+		</div>
+	</div>
+}
+
+@code {
+	private bool showModal = true;
+	private string activeTab = "register";
+
+
+	private void SelectTab(string tab)
+	{
+		activeTab = tab;
+	}
+
+	private void SelectRegister() => SelectTab("register");
+	private void SelectLogin() => SelectTab("login");
+
+	private void CloseModal() => showModal = false;
+
+	private void CloseOnBackdrop()
+	{
+		// intentionally close when clicking backdrop
+		CloseModal();
+	}
+
+	private void OnRegistered()
+	{
+		// after register, switch to login tab so user can login
+		activeTab = "login";
+		StateHasChanged();
+	}
+
+	private void OnLoggedIn()
+	{
+		// close modal after successful login
+		CloseModal();
+		StateHasChanged();
+	}
+}
+
+

@@ -1,0 +1,47 @@
+@namespace ITP2Tree.Components.Shared
+
+<div class="modal-backdrop-custom" @onclick="Cancel" style="z-index:2500">
+    <div class="modal-card" @onclick:stopPropagation>
+        <div class="d-flex align-items-center mb-3">
+            <h5 class="mb-0">@Title</h5>
+            <button class="btn btn-sm btn-link ms-auto" @onclick="Cancel">×</button>
+        </div>
+        <div class="mb-3">@Message</div>
+        <div class="d-flex gap-2 justify-content-end">
+            <button class="btn btn-outline-secondary" @onclick="Cancel">@CancelText</button>
+            <button class="btn btn-danger" @onclick="Confirm">@ConfirmText</button>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public string Title { get; set; } = "Sind Sie sicher?";
+
+    [Parameter]
+    public string Message { get; set; } = string.Empty;
+
+    [Parameter]
+    public string ConfirmText { get; set; } = "Löschen";
+
+    [Parameter]
+    public string CancelText { get; set; } = "Abbrechen";
+
+    [Parameter]
+    public EventCallback OnConfirm { get; set; }
+
+    [Parameter]
+    public EventCallback OnCancelCallback { get; set; }
+
+    private async Task Confirm()
+    {
+        if (OnConfirm.HasDelegate)
+            await OnConfirm.InvokeAsync(null);
+    }
+
+    private async Task Cancel()
+    {
+        if (OnCancelCallback.HasDelegate)
+            await OnCancelCallback.InvokeAsync(null);
+    }
+}

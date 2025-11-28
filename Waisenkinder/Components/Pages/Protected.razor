@@ -1,5 +1,6 @@
 @page "/protected"
 @using ITP2Tree.Data
+@using ITP2Tree.Components.Shared
 @using Microsoft.EntityFrameworkCore
 @using Microsoft.AspNetCore.Components.Forms
 @inject AppDBContext Db
@@ -16,78 +17,90 @@ else if (user == null)
 }
 else
 {
-    <h3>Willkommen, @user.Name</h3>
-    <p>E-Mail: @user.Email</p>
-    <button class="btn btn-secondary" @onclick="Logout">Logout</button>
-}
-
-@if (Auth.UserId is not null && user is not null)
-{
-    <hr />
-    <h4>Familienmitglieder hinzufügen</h4>
-    <EditForm EditContext="personEditContext" OnValidSubmit="HandleAddPerson">
-        <DataAnnotationsValidator />
-        <ValidationSummary />
-
-        <div class="mb-2">
-            <label>Name</label>
-            <InputText @bind-Value="newPerson.Name" class="form-control" />
-            <ValidationMessage For="() => newPerson.Name" />
+    <div class="d-flex align-items-center mb-3">
+        <div>
+            <h3 class="mb-0">Willkommen, @user.Name</h3>
+            <div class="text-muted">@user.Email</div>
         </div>
-        <div class="mb-2">
-            <label>Geburtsort</label>
-            <InputText @bind-Value="newPerson.Geburtsort" class="form-control" />
-            <ValidationMessage For="() => newPerson.Geburtsort" />
+        <div class="ms-auto d-flex gap-2 align-items-center">
+            <input placeholder="Suchen..." class="form-control form-control-sm" style="width:240px" @bind="searchTerm" />
+            <button class="btn btn-outline-secondary" @onclick="Logout">Logout</button>
+            <button class="btn btn-primary" @onclick="OpenAddModal">Person hinzufügen</button>
+            @if (!string.IsNullOrEmpty(csvHref))
+            {
+                <a class="d-none" href="@csvHref" download="personen.csv">download</a>
+            }
         </div>
-        <div class="mb-2">
-            <label>Geburtsdatum</label>
-            <InputText @bind-Value="newPerson.Geburtsdatum" class="form-control" />
-            <ValidationMessage For="() => newPerson.Geburtsdatum" />
-        </div>
-        <div class="mb-2">
-            <label>Bekannte Verwandte (Komma-getrennt)</label>
-            <InputText @bind-Value="newPerson.Verwandte" class="form-control" />
-            <ValidationMessage For="() => newPerson.Verwandte" />
-        </div>
-        <div class="mb-2">
-            <label>Notizen</label>
-            <InputTextArea @bind-Value="newPerson.Notizen" class="form-control" />
-        </div>
-
-        <button class="btn btn-primary" type="submit">Hinzufügen</button>
-    </EditForm>
+    </div>
 
     <hr />
-    <h4>Deine Personen</h4>
-    @if (persons is null || persons.Count == 0)
+
+    <h4 class="mb-3">Deine Personen</h4>
+    @if (persons is null || persons.Count == 0 || FilteredPersons.Count == 0)
     {
-        <p>Keine Personen vorhanden.</p>
+        <p class="text-muted">Keine Personen vorhanden. Nutze "Person hinzufügen" um loszulegen.</p>
     }
     else
     {
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Geburtsort</th>
-                    <th>Geburtsdatum</th>
-                    <th>Verwandte</th>
-                    <th>Notizen</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var p in persons)
-                {
-                    <tr>
-                        <td>@p.Name</td>
-                        <td>@p.Geburtsort</td>
-                        <td>@p.Geburtsdatum</td>
-                        <td>@p.Verwandte</td>
-                        <td>@p.Notizen</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+        <div class="person-grid">
+            @foreach (var p in FilteredPersons)
+            {
+                <PersonCard Person="p" OnEdit="OpenEditModal" OnDelete="RequestDeletePerson" />
+            }
+        </div>
+    }
+
+    @if (showAddModal)
+    {
+        <div class="modal-backdrop-custom" @onclick="CloseAddModal">
+            <div class="modal-card" @onclick:stopPropagation>
+                <div class="d-flex mb-3">
+                    <h5 class="mb-0">Person hinzufügen</h5>
+                    <button class="btn btn-sm btn-link ms-auto" @onclick="CloseAddModal">×</button>
+                </div>
+
+                <EditForm EditContext="personEditContext" OnValidSubmit="HandleAddPerson">
+                    <DataAnnotationsValidator />
+                    <ValidationSummary />
+
+                    <div class="row">
+                        <div class="col-md-6 mb-2">
+                            <label>Name</label>
+                            <InputText @bind-Value="newPerson.Name" class="form-control" />
+                            <ValidationMessage For="() => newPerson.Name" />
+                        </div>
+                        <div class="col-md-6 mb-2">
+                            <label>Geburtsort</label>
+                            <InputText @bind-Value="newPerson.Geburtsort" class="form-control" />
+                            <ValidationMessage For="() => newPerson.Geburtsort" />
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-2">
+                            <label>Geburtsdatum</label>
+                            <InputText @bind-Value="newPerson.Geburtsdatum" class="form-control" />
+                            <ValidationMessage For="() => newPerson.Geburtsdatum" />
+                        </div>
+                        <div class="col-md-6 mb-2">
+                            <label>Bekannte Verwandte (Komma-getrennt)</label>
+                            <InputText @bind-Value="newPerson.Verwandte" class="form-control" />
+                            <ValidationMessage For="() => newPerson.Verwandte" />
+                        </div>
+                    </div>
+
+                    <div class="mb-2">
+                        <label>Notizen</label>
+                        <InputTextArea @bind-Value="newPerson.Notizen" class="form-control" />
+                    </div>
+
+                    <div class="d-flex gap-2 mt-2">
+                        <button class="btn btn-primary" type="submit">Speichern</button>
+                        <button class="btn btn-outline-secondary" type="button" @onclick="CloseAddModal">Abbrechen</button>
+                    </div>
+                </EditForm>
+            </div>
+        </div>
     }
 }
 
@@ -97,6 +110,13 @@ else
     private List<Person>? persons;
     private EditContext? personEditContext;
     private ValidationMessageStore? validationMessageStore;
+    private bool showAddModal = false;
+    private bool showEditModal = false;
+    private Person? editPerson;
+    private bool showConfirmDelete = false;
+    private Person? personToDelete;
+    private string searchTerm = string.Empty;
+    private string? csvHref;
 
     protected override async Task OnParametersSetAsync()
     {
@@ -108,7 +128,29 @@ else
             personEditContext = new EditContext(newPerson);
             validationMessageStore = new ValidationMessageStore(personEditContext);
         }
+        // open add-person modal if query string contains open=persons
+        var uri = NavigationManager.ToAbsoluteUri(NavigationManager.Uri);
+        if (Microsoft.AspNetCore.WebUtilities.QueryHelpers.ParseQuery(uri.Query).TryGetValue("open", out var val))
+        {
+            if (val == "persons")
+            {
+                // prepare new person and show modal
+                newPerson = new Person();
+                personEditContext = new EditContext(newPerson);
+                validationMessageStore = new ValidationMessageStore(personEditContext);
+                showAddModal = true;
+            }
+        }
     }
+
+    private List<Person> FilteredPersons =>
+        string.IsNullOrWhiteSpace(searchTerm)
+            ? (persons ?? new List<Person>())
+            : (persons ?? new List<Person>()).Where(p =>
+                (p.Name ?? string.Empty).Contains(searchTerm, StringComparison.OrdinalIgnoreCase)
+                || (p.Geburtsort ?? string.Empty).Contains(searchTerm, StringComparison.OrdinalIgnoreCase)
+                || (p.Verwandte ?? string.Empty).Contains(searchTerm, StringComparison.OrdinalIgnoreCase)
+            ).ToList();
 
     private void Logout()
     {
@@ -147,6 +189,132 @@ else
         newPerson = new Person();
         personEditContext = new EditContext(newPerson);
         validationMessageStore = new ValidationMessageStore(personEditContext);
+        showAddModal = false;
         StateHasChanged();
     }
+
+    private void OpenAddModal()
+    {
+        newPerson = new Person();
+        personEditContext = new EditContext(newPerson);
+        validationMessageStore = new ValidationMessageStore(personEditContext);
+        showAddModal = true;
+    }
+
+    // If navigation contains ?open=persons the page will automatically open the Add Person modal
+
+    private void CloseAddModal()
+    {
+        showAddModal = false;
+    }
+
+    private async Task OnDeletePerson(Person p)
+    {
+        Db.Personen.Remove(p);
+        await Db.SaveChangesAsync();
+        persons = await Db.Personen.Where(x => x.BenutzerId == Auth.UserId).ToListAsync();
+        StateHasChanged();
+    }
+
+    private void OpenEditModal(Person p)
+    {
+        // create a detached copy to edit
+        editPerson = new Person
+        {
+            Id = p.Id,
+            BenutzerId = p.BenutzerId,
+            Name = p.Name,
+            Geburtsort = p.Geburtsort,
+            Geburtsdatum = p.Geburtsdatum,
+            Verwandte = p.Verwandte,
+            Notizen = p.Notizen
+        };
+        showEditModal = true;
+    }
+
+    private async Task OnSaveEdited(Person p)
+    {
+        // attach and update
+        var dbp = await Db.Personen.FindAsync(p.Id);
+        if (dbp != null)
+        {
+            dbp.Name = p.Name;
+            dbp.Geburtsort = p.Geburtsort;
+            dbp.Geburtsdatum = p.Geburtsdatum;
+            dbp.Verwandte = p.Verwandte;
+            dbp.Notizen = p.Notizen;
+            await Db.SaveChangesAsync();
+            persons = await Db.Personen.Where(x => x.BenutzerId == Auth.UserId).ToListAsync();
+        }
+        showEditModal = false;
+        StateHasChanged();
+    }
+
+    private void CloseEditModal()
+    {
+        showEditModal = false;
+        editPerson = null;
+    }
+
+    private void RequestDeletePerson(Person p)
+    {
+        personToDelete = p;
+        showConfirmDelete = true;
+    }
+
+    private async Task ConfirmDelete()
+    {
+        if (personToDelete is not null)
+        {
+            await OnDeletePerson(personToDelete);
+        }
+        showConfirmDelete = false;
+        personToDelete = null;
+    }
+
+    private void CancelDelete()
+    {
+        showConfirmDelete = false;
+        personToDelete = null;
+    }
+
+    [Inject] private IJSRuntime JS { get; set; } = default!;
+
+    private async Task ExportCsv()
+    {
+        if (persons is null || persons.Count == 0)
+        {
+            csvHref = null;
+            return;
+        }
+
+        var sb = new System.Text.StringBuilder();
+        sb.AppendLine("Name;Geburtsort;Geburtsdatum;Verwandte;Notizen");
+        foreach (var p in persons)
+        {
+            string line = $"{EscapeCsv(p.Name)};{EscapeCsv(p.Geburtsort)};{EscapeCsv(p.Geburtsdatum)};{EscapeCsv(p.Verwandte)};{EscapeCsv(p.Notizen)}";
+            sb.AppendLine(line);
+        }
+
+        var csv = sb.ToString();
+        var href = "data:text/csv;charset=utf-8," + Uri.EscapeDataString(csv);
+        await JS.InvokeVoidAsync("TreeEditor.download", href, "personen.csv");
+    }
+
+    private static string EscapeCsv(string? s) => (s ?? string.Empty).Replace("\r", "").Replace("\n", " ").Replace(";", ",");
+
+    // Render modals: Edit and Confirm Delete
+    // These were previously only tracked by flags which caused warnings; rendering them uses the flags.
+}
+
+@if (showEditModal && editPerson is not null)
+{
+    <PersonEditModal EditPerson="editPerson" OnSave="OnSaveEdited" OnCancel="CloseEditModal" />
+}
+
+@if (showConfirmDelete && personToDelete is not null)
+{
+    <ConfirmDialog Title="Löschen bestätigen" Message=$"Möchten Sie {personToDelete.Name} wirklich löschen?" OnConfirm="ConfirmDelete" OnCancelCallback="CancelDelete" ConfirmText="Löschen" CancelText="Abbrechen" />
+}
+
 }
