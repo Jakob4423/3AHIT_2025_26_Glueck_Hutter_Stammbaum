@@ -319,7 +319,7 @@ else
 
 @if (showConfirmDelete && personToDelete is not null)
 {
-    <ConfirmDialog Title="Löschen bestätigen" Message=$"Möchten Sie {personToDelete.Name} wirklich löschen?" OnConfirm="ConfirmDelete" OnCancelCallback="CancelDelete" ConfirmText="Löschen" CancelText="Abbrechen" />
+    <ConfirmDialog Title="Löschen bestätigen" Message="@($"Möchten Sie {personToDelete.Name} wirklich löschen?")" OnConfirm="ConfirmDelete" OnCancelCallback="CancelDelete" ConfirmText="Löschen" CancelText="Abbrechen" />
 }
 
 }
