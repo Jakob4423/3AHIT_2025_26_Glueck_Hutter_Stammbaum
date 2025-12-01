@@ -1,14 +1,21 @@
+@* 
+    PersonCard-Komponente - Kartendarstellung eines Familienmitglieds.
+    Zeigt die wichtigsten Informationen zu einer Person in einer Card.
+    Bietet Buttons zum Bearbeiten und Löschen.
+*@
 @namespace ITP2Tree.Components.Shared
 @using ITP2Tree.Data
 
 <div class="person-card card">
     <div class="card-body d-flex flex-column">
         <div class="d-flex align-items-start">
+            @* Avatar mit erstem Buchstaben des Namens *@
             <div class="me-3 avatar-placeholder">@Person.Name?[0]</div>
             <div class="flex-grow-1">
                 <h5 class="card-title mb-1">@Person.Name</h5>
                 <div class="text-muted small">@Person.Geburtsort — @Person.Geburtsdatum</div>
             </div>
+            @* Edit/Delete Buttons *@
             <div class="ms-2 text-end">
                 @if (OnEdit.HasDelegate)
                 {
@@ -21,6 +28,7 @@
             </div>
         </div>
 
+        @* Verwandte - falls vorhanden *@
         @if (!string.IsNullOrWhiteSpace(Person.Verwandte))
         {
             <div class="mt-3">
@@ -28,6 +36,7 @@
             </div>
         }
 
+        @* Notizen - falls vorhanden *@
         @if (!string.IsNullOrWhiteSpace(Person.Notizen))
         {
             <div class="mt-2 text-muted small">@Person.Notizen</div>
@@ -36,12 +45,21 @@
 </div>
 
 @code {
+    /// <summary>
+    /// Die anzuzeigende Person (erforderlich).
+    /// </summary>
     [Parameter, EditorRequired]
     public Person Person { get; set; } = null!;
 
+    /// <summary>
+    /// Callback-Event, das aufgerufen wird, wenn der Bearbeiten-Button geklickt wird.
+    /// </summary>
     [Parameter]
     public EventCallback<Person> OnEdit { get; set; }
 
+    /// <summary>
+    /// Callback-Event, das aufgerufen wird, wenn der Löschen-Button geklickt wird.
+    /// </summary>
     [Parameter]
     public EventCallback<Person> OnDelete { get; set; }
 }

@@ -1,9 +1,14 @@
+@* 
+    RegisterForm-Komponente - Neue Benutzer können sich hier registrieren.
+    Validiert Email, Name und Passwort mit Datenschutz (BCrypt-Hashing).
+*@
 @namespace ITP2Tree.Components.Shared
 @using System.ComponentModel.DataAnnotations
 @using ITP2Tree.Data
 @inject AppDBContext Db
 @inject NavigationManager Nav
 
+@* Registrierungs-Formular *@
 <EditForm Model="registerModel" OnValidSubmit="HandleRegister">
     <DataAnnotationsValidator />
     <ValidationSummary />
@@ -27,26 +32,54 @@
 </EditForm>
 
 @code {
+    /// <summary>
+    /// Callback-Event, das aufgerufen wird, wenn die Registrierung erfolgreich war.
+    /// </summary>
     [Parameter]
     public EventCallback OnSuccess { get; set; }
 
+    /// <summary>
+    /// Das Datenbindungsmodell für das Registrierungsformular.
+    /// </summary>
     private RegisterModel registerModel = new();
 
+    /// <summary>
+    /// Datenmodell für die Registrierungs-Validierung.
+    /// </summary>
     public class RegisterModel
     {
+        /// <summary>
+        /// Die Email-Adresse des neuen Benutzers.
+        /// Muss eindeutig sein und gültiges Email-Format haben.
+        /// </summary>
         [Required(ErrorMessage = "E-Mail ist erforderlich.")]
         [EmailAddress(ErrorMessage = "Ungültige E-Mail-Adresse.")]
         public string Email { get; set; } = string.Empty;
 
+        /// <summary>
+        /// Der Name des neuen Benutzers.
+        /// Darf nur Buchstaben, Leerzeichen und Bindestriche enthalten.
+        /// </summary>
         [Required(ErrorMessage = "Name ist erforderlich.")]
         [RegularExpression(@"^[A-Za-zÄÖÜäöüß\s\-]+$", ErrorMessage = "Name darf nur Buchstaben, Leerzeichen und Bindestriche enthalten.")]
         public string Name { get; set; } = string.Empty;
 
+        /// <summary>
+        /// Das Passwort des neuen Benutzers (Klartext, wird zu BCrypt-Hash konvertiert).
+        /// Muss mindestens 8 Zeichen lang sein.
+        /// </summary>
         [Required(ErrorMessage = "Passwort ist erforderlich.")]
         [MinLength(8, ErrorMessage = "Passwort muss mindestens 8 Zeichen enthalten.")]
         public string Password { get; set; } = string.Empty;
     }
 
+    /// <summary>
+    /// Verarbeitet die Registrierung:
+    /// 1. Erstellt einen neuen Benutzer
+    /// 2. Hasht das Passwort mit BCrypt
+    /// 3. Speichert in der Datenbank
+    /// 4. Ruft das OnSuccess-Callback auf
+    /// </summary>
     private async Task HandleRegister()
     {
         var user = new Benutzer

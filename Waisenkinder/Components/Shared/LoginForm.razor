@@ -1,3 +1,7 @@
+@* 
+    LoginForm-Komponente - Authentifizierung für bestehende Benutzer.
+    Validiert Email und Passwort mit BCrypt-Verifikation.
+*@
 @namespace ITP2Tree.Components.Shared
 @using System.ComponentModel.DataAnnotations
 @using Microsoft.EntityFrameworkCore
@@ -6,11 +10,13 @@
 @inject NavigationManager Navigation
 @inject ITP2Tree.Services.AuthService Auth
 
+@* Fehlerausgabe *@
 @if (!string.IsNullOrEmpty(errorMessage))
 {
     <div class="alert alert-danger">@errorMessage</div>
 }
 
+@* Login-Formular *@
 <EditForm Model="loginModel" OnValidSubmit="HandleLogin">
     <DataAnnotationsValidator />
     <ValidationSummary />
@@ -29,22 +35,47 @@
 </EditForm>
 
 @code {
+    /// <summary>
+    /// Callback-Event, das aufgerufen wird, wenn der Login erfolgreich war.
+    /// </summary>
     [Parameter]
     public EventCallback OnSuccess { get; set; }
 
+    /// <summary>
+    /// Das Datenbindungsmodell für das Formular.
+    /// </summary>
     private LoginModel loginModel = new();
+
+    /// <summary>
+    /// Fehlermeldung, die dem Benutzer angezeigt wird.
+    /// </summary>
     private string? errorMessage;
 
+    /// <summary>
+    /// Datenmodell für die Login-Validierung.
+    /// </summary>
     public class LoginModel
     {
+        /// <summary>
+        /// Die Email-Adresse des Benutzers.
+        /// </summary>
         [Required(ErrorMessage = "E-Mail ist erforderlich.")]
         [EmailAddress(ErrorMessage = "Ungültige E-Mail-Adresse.")]
         public string Email { get; set; } = string.Empty;
 
+        /// <summary>
+        /// Das Passwort des Benutzers (Klartext, wird später gehasht verglichen).
+        /// </summary>
         [Required(ErrorMessage = "Passwort ist erforderlich.")]
         public string Password { get; set; } = string.Empty;
     }
 
+    /// <summary>
+    /// Verarbeitet den Login:
+    /// 1. Sucht den Benutzer in der Datenbank
+    /// 2. Vergleicht das Passwort mit dem gehashten Passwort
+    /// 3. Meldet den Benutzer an, wenn erfolgreich
+    /// </summary>
     private async Task HandleLogin()
     {
         errorMessage = null;

@@ -136,6 +136,7 @@ c:\Schule\itp2\Waisenkinder_hutter_glueck\3AHIT_2025_26_Glueck_Hutter_Stammbaum\
 C:\Users\hutte\Desktop\ITP2\Stammbaum\3AHIT_2025_26_Glueck_Hutter_Stammbaum\Waisenkinder\bin\Debug\net9.0\appsettings.Development.json
 C:\Users\hutte\Desktop\ITP2\Stammbaum\3AHIT_2025_26_Glueck_Hutter_Stammbaum\Waisenkinder\bin\Debug\net9.0\appsettings.json
 C:\Users\hutte\Desktop\ITP2\Stammbaum\3AHIT_2025_26_Glueck_Hutter_Stammbaum\Waisenkinder\bin\Debug\net9.0\Data\obj\Data.csproj.nuget.dgspec.json
+C:\Users\hutte\Desktop\ITP2\Stammbaum\3AHIT_2025_26_Glueck_Hutter_Stammbaum\Waisenkinder\bin\Debug\net9.0\Data\obj\Debug\net8.0\Data.sourcelink.json
 C:\Users\hutte\Desktop\ITP2\Stammbaum\3AHIT_2025_26_Glueck_Hutter_Stammbaum\Waisenkinder\bin\Debug\net9.0\Data\obj\Debug\net9.0\Data.sourcelink.json
 C:\Users\hutte\Desktop\ITP2\Stammbaum\3AHIT_2025_26_Glueck_Hutter_Stammbaum\Waisenkinder\bin\Debug\net9.0\Data\obj\project.assets.json
 C:\Users\hutte\Desktop\ITP2\Stammbaum\3AHIT_2025_26_Glueck_Hutter_Stammbaum\Waisenkinder\bin\Debug\net9.0\package.json
@@ -268,4 +269,3 @@ C:\Users\hutte\Desktop\ITP2\Stammbaum\3AHIT_2025_26_Glueck_Hutter_Stammbaum\Wais
 C:\Users\hutte\Desktop\ITP2\Stammbaum\3AHIT_2025_26_Glueck_Hutter_Stammbaum\Waisenkinder\obj\Debug\net9.0\ref\Tree.dll
 C:\Users\hutte\Desktop\ITP2\Stammbaum\3AHIT_2025_26_Glueck_Hutter_Stammbaum\Waisenkinder\bin\Debug\net9.0\Data\bin\Debug\net8.0\Data.deps.json
 C:\Users\hutte\Desktop\ITP2\Stammbaum\3AHIT_2025_26_Glueck_Hutter_Stammbaum\Waisenkinder\bin\Debug\net9.0\Data\bin\Debug\net8.0\Data.runtimeconfig.json
-C:\Users\hutte\Desktop\ITP2\Stammbaum\3AHIT_2025_26_Glueck_Hutter_Stammbaum\Waisenkinder\bin\Debug\net9.0\Data\obj\Debug\net8.0\Data.sourcelink.json

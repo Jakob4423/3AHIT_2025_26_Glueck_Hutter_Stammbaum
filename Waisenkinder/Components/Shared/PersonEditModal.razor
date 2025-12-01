@@ -1,3 +1,8 @@
+@* 
+    PersonEditModal-Komponente - Modal zum Bearbeiten einer Person.
+    Zeigt ein Formular mit allen Person-Feldern.
+    Speichert Änderungen mit Validierung.
+*@
 @namespace ITP2Tree.Components.Shared
 @using ITP2Tree.Data
 @using Microsoft.AspNetCore.Components.Forms
@@ -9,6 +14,7 @@
             <button class="btn btn-sm btn-link ms-auto" @onclick="Cancel">×</button>
         </div>
 
+        @* EditForm mit Validierung *@
         <EditForm Model="EditPerson" OnValidSubmit="Save">
             <DataAnnotationsValidator />
             <ValidationSummary />
@@ -49,26 +55,44 @@
 </div>
 
 @code {
+    /// <summary>
+    /// Die zu bearbeitende Person (erforderlich).
+    /// </summary>
     [Parameter, EditorRequired]
     public Person EditPerson { get; set; } = null!;
 
+    /// <summary>
+    /// Callback-Event, das aufgerufen wird, wenn die Person gespeichert wird.
+    /// </summary>
     [Parameter]
     public EventCallback<Person> OnSave { get; set; }
 
+    /// <summary>
+    /// Callback-Event, das aufgerufen wird, wenn abgebrochen wird.
+    /// </summary>
     [Parameter]
     public EventCallback OnCancel { get; set; }
 
+    /// <summary>
+    /// Speichert die Änderungen an der Person.
+    /// </summary>
     private async Task Save()
     {
         if (OnSave.HasDelegate)
             await OnSave.InvokeAsync(EditPerson);
     }
 
+    /// <summary>
+    /// Bricht die Bearbeitung ab.
+    /// </summary>
     private async Task CancelInternal()
     {
         if (OnCancel.HasDelegate)
             await OnCancel.InvokeAsync(null);
     }
 
+    /// <summary>
+    /// Wrapper-Methode für den Abbruch.
+    /// </summary>
     private Task Cancel() => CancelInternal();
 }

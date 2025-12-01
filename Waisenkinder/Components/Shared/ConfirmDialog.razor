@@ -1,3 +1,7 @@
+@* 
+    ConfirmDialog-Komponente - Bestätigungsdialog für kritische Aktionen.
+    Zeigt eine Meldung mit Bestätigungs- und Abbrechen-Buttons.
+*@
 @namespace ITP2Tree.Components.Shared
 
 <div class="modal-backdrop-custom" @onclick="Cancel" style="z-index:2500">
@@ -15,30 +19,54 @@
 </div>
 
 @code {
+    /// <summary>
+    /// Der Titel des Dialogs.
+    /// </summary>
     [Parameter]
     public string Title { get; set; } = "Sind Sie sicher?";
 
+    /// <summary>
+    /// Die Bestätigungsmeldung für den Benutzer.
+    /// </summary>
     [Parameter]
     public string Message { get; set; } = string.Empty;
 
+    /// <summary>
+    /// Der Text des Bestätigungs-Buttons.
+    /// </summary>
     [Parameter]
     public string ConfirmText { get; set; } = "Löschen";
 
+    /// <summary>
+    /// Der Text des Abbrechen-Buttons.
+    /// </summary>
     [Parameter]
     public string CancelText { get; set; } = "Abbrechen";
 
+    /// <summary>
+    /// Event, das aufgerufen wird, wenn die Bestätigung geklickt wird.
+    /// </summary>
     [Parameter]
     public EventCallback OnConfirm { get; set; }
 
+    /// <summary>
+    /// Event, das aufgerufen wird, wenn der Dialog abgebrochen wird.
+    /// </summary>
     [Parameter]
     public EventCallback OnCancelCallback { get; set; }
 
+    /// <summary>
+    /// Ruft das OnConfirm-Event auf.
+    /// </summary>
     private async Task Confirm()
     {
         if (OnConfirm.HasDelegate)
             await OnConfirm.InvokeAsync(null);
     }
 
+    /// <summary>
+    /// Ruft das OnCancelCallback-Event auf.
+    /// </summary>
     private async Task Cancel()
     {
         if (OnCancelCallback.HasDelegate)
