@@ -1,5 +1,5 @@
 using System.ComponentModel.DataAnnotations;
-
+//Glück 
 namespace ITP2Tree.Data
 {
     /// <summary>
