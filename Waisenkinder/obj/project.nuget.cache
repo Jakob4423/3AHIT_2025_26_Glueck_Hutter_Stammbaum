@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "dZ8mOJ7RZLE=",
+  "dgSpecHash": "SgvbmsVej2o=",
   "success": true,
-  "projectFilePath": "C:\\Users\\hutte\\Desktop\\ITP2\\Stammbaum\\3AHIT_2025_26_Glueck_Hutter_Stammbaum\\Waisenkinder\\Tree.csproj",
+  "projectFilePath": "C:\\Users\\hutte\\Desktop\\HTLCS\\ITP_Projekt\\3AHIT_2025_26_Glueck_Hutter_Stammbaum\\Waisenkinder\\Tree.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\hutte\\.nuget\\packages\\bcrypt.net-next\\4.0.2\\bcrypt.net-next.4.0.2.nupkg.sha512",
     "C:\\Users\\hutte\\.nuget\\packages\\microsoft.aspnetcore.components.webassembly.server\\9.0.0\\microsoft.aspnetcore.components.webassembly.server.9.0.0.nupkg.sha512",
