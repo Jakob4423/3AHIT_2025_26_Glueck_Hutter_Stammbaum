@@ -23,7 +23,10 @@ else
     }
     else if (persons.Count == 0)
     {
-        <p class="text-muted">Keine Personen gefunden. Gehe zurück zu "Geschützte Seite" und füge welche hinzu.</p>
+        <div class="alert alert-info">
+            <p class="text-muted">Keine Personen gefunden. Füge Personen hinzu, um einen Stammbaum zu erstellen.</p>
+            <a href="/protected" class="btn btn-primary">Personen verwalten</a>
+        </div>
     }
     else
     {

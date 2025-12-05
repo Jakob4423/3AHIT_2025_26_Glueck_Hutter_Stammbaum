@@ -6,35 +6,54 @@
 *@
 @page "/"
 @using ITP2Tree.Components.Shared
+@using Microsoft.AspNetCore.Components.Authorization
+@inject ITP2Tree.Services.AuthService Auth
 
 <PageTitle>Home - Stammbaum für Waisenkinder</PageTitle>
 
 <h1 class="display-5">Willkommen zu Waisenkinder.Tree</h1>
 
-@* Modal mit Register/Login Tabs *@
-@if (showModal)
-{
-	<div class="modal-backdrop-custom" @onclick="CloseOnBackdrop">
-		<div class="modal-card" @onclick:stopPropagation>
-			<div class="d-flex mb-3 align-items-center">
-				<button class="me-2" @onclick="SelectRegister">Registrieren</button>
-				<button class="me-2" @onclick="SelectLogin">Login</button>
-				<button class="btn btn-sm btn-link ms-auto" @onclick="CloseModal">×</button>
+@* Inhalt wenn angemeldet *@
+<AuthorizeView>
+	<Authorized Context="authContext">
+		<div class="mt-5">
+			<div class="alert alert-success">
+				<h4>Du bist erfolgreich angemeldet!</h4>
+				<p class="mb-0">Du kannst jetzt deinen persönlichen Stammbaum verwalten und erstellen.</p>
 			</div>
-
-			<div>
-				@if (activeTab == "register")
-				{
-					<RegisterForm OnSuccess="OnRegistered" />
-				}
-				else
-				{
-					<LoginForm OnSuccess="OnLoggedIn" />
-				}
+			<div class="mt-4 d-flex gap-3">
+				<a href="/tree" class="btn btn-primary btn-lg">Stammbaum ansehen</a>
+				<a href="/protected" class="btn btn-outline-primary btn-lg">Personen verwalten</a>
 			</div>
 		</div>
-	</div>
-}
+	</Authorized>
+	<NotAuthorized>
+		@* Modal mit Register/Login Tabs *@
+		@if (showModal)
+		{
+			<div class="modal-backdrop-custom" @onclick="CloseOnBackdrop">
+				<div class="modal-card" @onclick:stopPropagation>
+					<div class="d-flex mb-3 align-items-center">
+						<button class="me-2" @onclick="SelectRegister">Registrieren</button>
+						<button class="me-2" @onclick="SelectLogin">Login</button>
+						<button class="btn btn-sm btn-link ms-auto" @onclick="CloseModal">×</button>
+					</div>
+
+					<div>
+						@if (activeTab == "register")
+						{
+							<RegisterForm OnSuccess="OnRegistered" />
+						}
+						else
+						{
+							<LoginForm OnSuccess="OnLoggedIn" />
+						}
+					</div>
+				</div>
+			</div>
+		}
+	</NotAuthorized>
+</AuthorizeView>
 
 @code {
 	/// <summary>
@@ -90,7 +109,7 @@
 
 	/// <summary>
 	/// Wird aufgerufen, wenn der Login erfolgreich war.
-	/// Schließt das Modal und navigiert zur geschützten Seite.
+	/// Schließt das Modal und zeigt den Willkommenstext.
 	/// </summary>
 	private void OnLoggedIn()
 	{
@@ -98,5 +117,4 @@
 		StateHasChanged();
 	}
 }
-
 
