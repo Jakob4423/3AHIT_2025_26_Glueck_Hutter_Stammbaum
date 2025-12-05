@@ -37,6 +37,17 @@ else
 
         <div class="card p-3">
             <svg id="treeSvg" width="900" height="600" style="border:1px solid rgba(0,0,0,0.06); background:#fff;">
+                <!-- Verbindungen/Linien zwischen Verwandten -->
+                @foreach (var connection in connections)
+                {
+                    <g>
+                        <line x1="@connection.X1" y1="@connection.Y1" x2="@connection.X2" y2="@connection.Y2" stroke="#888" stroke-width="2" />
+                        <!-- Label für Beziehungstyp in der Mitte der Linie -->
+                        <text x="@((connection.X1 + connection.X2) / 2)" y="@((connection.Y1 + connection.Y2) / 2 - 5)" font-family="Segoe UI, system-ui" font-size="11" fill="#666" text-anchor="middle">@connection.Beziehungstyp</text>
+                    </g>
+                }
+                
+                <!-- Knoten -->
                 @foreach (var n in nodes)
                 {
                     <g class="node" transform="translate(@n.X,@n.Y)" data-id="@n.Id">
@@ -52,12 +63,16 @@ else
 @code {
     private List<Person>? persons;
     private List<Node> nodes = new();
+    private List<Connection> connections = new();
 
     protected override async Task OnInitializedAsync()
     {
         if (Auth.UserId is not null)
         {
-            persons = await Db.Personen.Where(p => p.BenutzerId == Auth.UserId.Value).ToListAsync();
+            persons = await Db.Personen
+                .Where(p => p.BenutzerId == Auth.UserId.Value)
+                .ToListAsync();
+            
             if (persons != null)
             {
                 int i = 0;
@@ -66,6 +81,43 @@ else
                     nodes.Add(new Node { Id = p.Id, Label = p.Name ?? "(ohne Name)", X = 120 + (i % 4) * 220, Y = 60 + (i / 4) * 120 });
                     i++;
                 }
+                
+                // Verbindungen basierend auf Verwandtschaftsbeziehungen
+                await BuildConnections();
+            }
+        }
+    }
+
+    /// <summary>
+    /// Erstellt Verbindungen zwischen Personen basierend auf den Verwandtschaftsbeziehungen
+    /// </summary>
+    private async Task BuildConnections()
+    {
+        connections.Clear();
+        
+        // Lade alle Verwandtschaftsbeziehungen für die Personen des aktuellen Benutzers
+        var verwandtschaften = await Db.Verwandtschaften
+            .Where(v => persons!.Select(p => p.Id).Contains(v.PersonAId) || 
+                        persons!.Select(p => p.Id).Contains(v.PersonBId))
+            .ToListAsync();
+        
+        foreach (var v in verwandtschaften)
+        {
+            var nodeA = nodes.FirstOrDefault(n => n.Id == v.PersonAId);
+            var nodeB = nodes.FirstOrDefault(n => n.Id == v.PersonBId);
+            
+            if (nodeA != null && nodeB != null)
+            {
+                connections.Add(new Connection
+                {
+                    FromNodeId = v.PersonAId,
+                    ToNodeId = v.PersonBId,
+                    X1 = nodeA.X,
+                    Y1 = nodeA.Y,
+                    X2 = nodeB.X,
+                    Y2 = nodeB.Y,
+                    Beziehungstyp = v.Beziehungstyp
+                });
             }
         }
     }
@@ -92,5 +144,16 @@ else
         public string Label { get; set; } = string.Empty;
         public double X { get; set; }
         public double Y { get; set; }
+    }
+
+    private class Connection
+    {
+        public int FromNodeId { get; set; }
+        public int ToNodeId { get; set; }
+        public double X1 { get; set; }
+        public double Y1 { get; set; }
+        public double X2 { get; set; }
+        public double Y2 { get; set; }
+        public string Beziehungstyp { get; set; } = string.Empty;
     }
 }

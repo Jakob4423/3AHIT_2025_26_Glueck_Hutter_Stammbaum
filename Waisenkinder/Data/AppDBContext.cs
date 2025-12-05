@@ -6,7 +6,7 @@ namespace ITP2Tree.Data
     /// Entity Framework Core Datenkontext der Anwendung.
     /// </summary>
     /// <remarks>
-    /// Definiert die DbSets für <see cref="Benutzer"/> und <see cref="Person"/>
+    /// Definiert die DbSets für <see cref="Benutzer"/>, <see cref="Person"/> und <see cref="Verwandtschaft"/>
     /// und konfiguriert einfache Constraints (z. B. eindeutige E-Mail, Cascade Delete).
     /// </remarks>
     public class AppDBContext : DbContext
@@ -27,6 +27,11 @@ namespace ITP2Tree.Data
         public DbSet<Person> Personen => Set<Person>();
 
         /// <summary>
+        /// DbSet für Verwandtschaftsbeziehungen.
+        /// </summary>
+        public DbSet<Verwandtschaft> Verwandtschaften => Set<Verwandtschaft>();
+
+        /// <summary>
         /// Model-Konfiguration: Indices, Beziehungen, Delete-Verhalten.
         /// </summary>
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -40,6 +45,20 @@ namespace ITP2Tree.Data
                 .WithMany(b => b.Personen)
                 .HasForeignKey(p => p.BenutzerId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            // Verwandtschaftsbeziehungen konfigurieren
+            modelBuilder.Entity<Verwandtschaft>()
+                .HasOne(v => v.PersonA)
+                .WithMany(p => p.VerwandtschaftenAlsQuelle)
+                .HasForeignKey(v => v.PersonAId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Verwandtschaft>()
+                .HasOne(v => v.PersonB)
+                .WithMany(p => p.VerwandtschaftenAlsZiel)
+                .HasForeignKey(v => v.PersonBId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }
+

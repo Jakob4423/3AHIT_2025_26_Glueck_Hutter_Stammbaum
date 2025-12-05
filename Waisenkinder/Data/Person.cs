@@ -52,12 +52,51 @@ namespace ITP2Tree.Data
         /// Bekannte Verwandte, als komma-getrennte Liste. Erlaubte Zeichen: Buchstaben, Leerzeichen, Kommas, Bindestriche.
         /// </summary>
         [Required]
-        [RegularExpression(@"^[A-Za-zÄÖÜäöüß\s\-,]+$", ErrorMessage = "Verwandte dürfen nur Buchstaben, Leerzeichen, Kommas und Bindestriche enthalten.")]
+        [RegularExpression(@"^[A-Za-zÄÖÜäöüß\s\-,|:]+$", ErrorMessage = "Verwandte dürfen nur Buchstaben, Leerzeichen, Kommas, Bindestriche, Doppelpunkte und Pipes enthalten.")]
         public string Verwandte { get; set; } = string.Empty;
 
         /// <summary>
         /// Optionale Notizen zu dieser Person. Kann null sein.
         /// </summary>
         public string? Notizen { get; set; }
+
+        /// <summary>
+        /// Navigationseigenschaft für die Verwandtschaftsbeziehungen dieser Person.
+        /// </summary>
+        public List<Verwandtschaft> VerwandtschaftenAlsQuelle { get; set; } = new();
+        public List<Verwandtschaft> VerwandtschaftenAlsZiel { get; set; } = new();
+    }
+
+    /// <summary>
+    /// Repräsentiert eine Verwandtschaftsbeziehung zwischen zwei Personen.
+    /// </summary>
+    public class Verwandtschaft
+    {
+        /// <summary>
+        /// Eindeutige Identifikationsnummer.
+        /// </summary>
+        public int Id { get; set; }
+
+        /// <summary>
+        /// FK: Id der Person, die die Beziehung ausgeht (z.B. der Vater/die Mutter).
+        /// </summary>
+        public int PersonAId { get; set; }
+
+        /// <summary>
+        /// FK: Id der Person, die die Beziehung empfängt (z.B. das Kind).
+        /// </summary>
+        public int PersonBId { get; set; }
+
+        /// <summary>
+        /// Der Typ der Beziehung (z.B. "Vater", "Mutter", "Sohn", "Tochter", "Bruder", "Schwester", "Ehepartner").
+        /// </summary>
+        [Required]
+        public string Beziehungstyp { get; set; } = string.Empty;
+
+        /// <summary>
+        /// Navigationseigenschaften.
+        /// </summary>
+        public Person? PersonA { get; set; }
+        public Person? PersonB { get; set; }
     }
 }

@@ -46,7 +46,10 @@ else
         <div class="person-grid">
             @foreach (var p in FilteredPersons)
             {
-                <PersonCard Person="p" OnEdit="OpenEditModal" OnDelete="RequestDeletePerson" />
+                <div style="position: relative;">
+                    <PersonCard Person="p" OnEdit="OpenEditModal" OnDelete="RequestDeletePerson" />
+                    <button class="btn btn-sm btn-outline-info" style="position: absolute; top: 10px; right: 10px;" @onclick="() => OpenRelationshipModal(p)" title="Verwandtschaften verwalten">👥</button>
+                </div>
             }
         </div>
     }
@@ -118,6 +121,13 @@ else
     private Person? personToDelete;
     private string searchTerm = string.Empty;
     private string? csvHref;
+
+    // Verwandtschaftsverwaltung
+    private bool showRelationshipModal = false;
+    private Person? selectedPerson;
+    private List<Verwandtschaft>? selectedPersonRelationships;
+    private int newRelationshipPersonId = 0;
+    private string newRelationshipType = string.Empty;
 
     protected override async Task OnParametersSetAsync()
     {
@@ -309,6 +319,78 @@ else
 
     private static string EscapeCsv(string? s) => (s ?? string.Empty).Replace("\r", "").Replace("\n", " ").Replace(";", ",");
 
+    private async Task OpenRelationshipModal(Person p)
+    {
+        selectedPerson = p;
+        selectedPersonRelationships = await Db.Verwandtschaften
+            .Where(v => v.PersonAId == p.Id || v.PersonBId == p.Id)
+            .Include(v => v.PersonA)
+            .Include(v => v.PersonB)
+            .ToListAsync();
+        newRelationshipPersonId = 0;
+        newRelationshipType = string.Empty;
+        showRelationshipModal = true;
+    }
+
+    private void CloseRelationshipModal()
+    {
+        showRelationshipModal = false;
+        selectedPerson = null;
+        selectedPersonRelationships = null;
+    }
+
+    private async Task AddRelationship()
+    {
+        if (selectedPerson == null || newRelationshipPersonId == 0 || string.IsNullOrEmpty(newRelationshipType))
+            return;
+
+        var verwandtschaft = new Verwandtschaft
+        {
+            PersonAId = selectedPerson.Id,
+            PersonBId = newRelationshipPersonId,
+            Beziehungstyp = newRelationshipType
+        };
+
+        Db.Verwandtschaften.Add(verwandtschaft);
+        await Db.SaveChangesAsync();
+
+        // Reload relationships
+        if (selectedPerson != null)
+        {
+            selectedPersonRelationships = await Db.Verwandtschaften
+                .Where(v => v.PersonAId == selectedPerson.Id || v.PersonBId == selectedPerson.Id)
+                .Include(v => v.PersonA)
+                .Include(v => v.PersonB)
+                .ToListAsync();
+        }
+
+        newRelationshipPersonId = 0;
+        newRelationshipType = string.Empty;
+        StateHasChanged();
+    }
+
+    private async Task DeleteRelationship(int relationshipId)
+    {
+        var verwandtschaft = await Db.Verwandtschaften.FindAsync(relationshipId);
+        if (verwandtschaft != null)
+        {
+            Db.Verwandtschaften.Remove(verwandtschaft);
+            await Db.SaveChangesAsync();
+
+            // Reload relationships
+            if (selectedPerson != null)
+            {
+                selectedPersonRelationships = await Db.Verwandtschaften
+                    .Where(v => v.PersonAId == selectedPerson.Id || v.PersonBId == selectedPerson.Id)
+                    .Include(v => v.PersonA)
+                    .Include(v => v.PersonB)
+                    .ToListAsync();
+            }
+
+            StateHasChanged();
+        }
+    }
+
     // Render modals: Edit and Confirm Delete
     // These were previously only tracked by flags which caused warnings; rendering them uses the flags.
 }
@@ -321,6 +403,75 @@ else
 @if (showConfirmDelete && personToDelete is not null)
 {
     <ConfirmDialog Title="Löschen bestätigen" Message="@($"Möchten Sie {personToDelete.Name} wirklich löschen?")" OnConfirm="ConfirmDelete" OnCancelCallback="CancelDelete" ConfirmText="Löschen" CancelText="Abbrechen" />
+}
+
+@if (showRelationshipModal && selectedPerson is not null)
+{
+    <div class="modal-backdrop-custom" @onclick="CloseRelationshipModal">
+        <div class="modal-card" @onclick:stopPropagation style="max-width: 600px;">
+            <div class="d-flex mb-3">
+                <h5 class="mb-0">Verwandtschaften für @selectedPerson.Name</h5>
+                <button class="btn btn-sm btn-link ms-auto" @onclick="CloseRelationshipModal">×</button>
+            </div>
+
+            <!-- Vorhandene Verwandtschaften -->
+            @if (selectedPersonRelationships != null && selectedPersonRelationships.Count > 0)
+            {
+                <h6>Bestehende Verwandtschaften:</h6>
+                <div style="max-height: 200px; overflow-y: auto; margin-bottom: 15px;">
+                    @foreach (var rel in selectedPersonRelationships)
+                    {
+                        var otherPerson = rel.PersonAId == selectedPerson.Id ? rel.PersonB?.Name : rel.PersonA?.Name;
+                        <div class="d-flex justify-content-between align-items-center p-2 border rounded mb-1">
+                            <span>@otherPerson - @rel.Beziehungstyp</span>
+                            <button class="btn btn-sm btn-danger" @onclick="() => DeleteRelationship(rel.Id)">Löschen</button>
+                        </div>
+                    }
+                </div>
+            }
+
+            <!-- Neue Verwandtschaft hinzufügen -->
+            <h6>Neue Verwandtschaft hinzufügen:</h6>
+            <div class="mb-2">
+                <label>Verwandte Person</label>
+                <select class="form-control" @bind="newRelationshipPersonId">
+                    <option value="0">-- Wähle eine Person --</option>
+                    @foreach (var p in persons!.Where(x => x.Id != selectedPerson.Id))
+                    {
+                        <option value="@p.Id">@p.Name</option>
+                    }
+                </select>
+            </div>
+
+            <div class="mb-2">
+                <label>Beziehungstyp</label>
+                <select class="form-control" @bind="newRelationshipType">
+                    <option value="">-- Wähle einen Beziehungstyp --</option>
+                    <option value="Vater">Vater</option>
+                    <option value="Mutter">Mutter</option>
+                    <option value="Sohn">Sohn</option>
+                    <option value="Tochter">Tochter</option>
+                    <option value="Bruder">Bruder</option>
+                    <option value="Schwester">Schwester</option>
+                    <option value="Ehemann">Ehemann</option>
+                    <option value="Ehefrau">Ehefrau</option>
+                    <option value="Großvater">Großvater</option>
+                    <option value="Großmutter">Großmutter</option>
+                    <option value="Enkel">Enkel</option>
+                    <option value="Enkelin">Enkelin</option>
+                    <option value="Onkel">Onkel</option>
+                    <option value="Tante">Tante</option>
+                    <option value="Cousin">Cousin</option>
+                    <option value="Cousine">Cousine</option>
+                </select>
+            </div>
+
+            <div class="d-flex gap-2 mt-3">
+                <button class="btn btn-primary" @onclick="AddRelationship" disabled="@(newRelationshipPersonId == 0 || string.IsNullOrEmpty(newRelationshipType))">Hinzufügen</button>
+                <button class="btn btn-outline-secondary" @onclick="CloseRelationshipModal">Schließen</button>
+            </div>
+        </div>
+    </div>
 }
 
 }
