@@ -43,12 +43,12 @@ else
     }
     else
     {
-        <div class="person-grid">
+        <div class="person-grid" style="position:relative;">
             @foreach (var p in FilteredPersons)
             {
                 <div style="position: relative;">
                     <PersonCard Person="p" OnEdit="OpenEditModal" OnDelete="RequestDeletePerson" />
-                    <button class="btn btn-sm btn-outline-info" style="position: absolute; top: 10px; right: 10px;" @onclick="() => OpenRelationshipModal(p)" title="Verwandtschaften verwalten">👥</button>
+                    <button type="button" class="btn btn-sm btn-outline-info" style="position: absolute; top: 5px; right: 5px; z-index:10;" @onclick="() => OpenRelationshipModal(p)" title="Verwandtschaften verwalten">👥</button>
                 </div>
             }
         </div>
@@ -107,7 +107,6 @@ else
         </div>
     }
 }
-
 @code {
     private Benutzer? user;
     private Person newPerson = new();
@@ -222,43 +221,52 @@ else
     private async Task OnDeletePerson(Person p)
     {
         await JS.InvokeVoidAsync("console.log", $"OnDeletePerson called for {p?.Name} (Id={p?.Id})");
-        Db.Personen.Remove(p);
-        await Db.SaveChangesAsync();
-        persons = await Db.Personen.Where(x => x.BenutzerId == Auth.UserId).ToListAsync();
-        StateHasChanged();
+        if (p != null)
+        {
+            Db.Personen.Remove(p);
+            await Db.SaveChangesAsync();
+            persons = await Db.Personen.Where(x => x.BenutzerId == Auth.UserId).ToListAsync();
+            StateHasChanged();
+        }
     }
 
     private async Task OpenEditModal(Person p)
     {
         await JS.InvokeVoidAsync("console.log", $"OpenEditModal called for {p?.Name} (Id={p?.Id})");
-        // create a detached copy to edit
-        editPerson = new Person
+        if (p != null)
         {
-            Id = p.Id,
-            BenutzerId = p.BenutzerId,
-            Name = p.Name,
-            Geburtsort = p.Geburtsort,
-            Geburtsdatum = p.Geburtsdatum,
-            Verwandte = p.Verwandte,
-            Notizen = p.Notizen
-        };
-        showEditModal = true;
+            // create a detached copy to edit
+            editPerson = new Person
+            {
+                Id = p.Id,
+                BenutzerId = p.BenutzerId,
+                Name = p.Name ?? string.Empty,
+                Geburtsort = p.Geburtsort ?? string.Empty,
+                Geburtsdatum = p.Geburtsdatum ?? string.Empty,
+                Verwandte = p.Verwandte ?? string.Empty,
+                Notizen = p.Notizen
+            };
+            showEditModal = true;
+        }
     }
 
     private async Task OnSaveEdited(Person p)
     {
         await JS.InvokeVoidAsync("console.log", $"OnSaveEdited called for {p?.Name} (Id={p?.Id})");
         // attach and update
-        var dbp = await Db.Personen.FindAsync(p.Id);
-        if (dbp != null)
+        if (p != null)
         {
-            dbp.Name = p.Name;
-            dbp.Geburtsort = p.Geburtsort;
-            dbp.Geburtsdatum = p.Geburtsdatum;
-            dbp.Verwandte = p.Verwandte;
-            dbp.Notizen = p.Notizen;
-            await Db.SaveChangesAsync();
-            persons = await Db.Personen.Where(x => x.BenutzerId == Auth.UserId).ToListAsync();
+            var dbp = await Db.Personen.FindAsync(p.Id);
+            if (dbp != null)
+            {
+                dbp.Name = p.Name;
+                dbp.Geburtsort = p.Geburtsort;
+                dbp.Geburtsdatum = p.Geburtsdatum;
+                dbp.Verwandte = p.Verwandte;
+                dbp.Notizen = p.Notizen;
+                await Db.SaveChangesAsync();
+                persons = await Db.Personen.Where(x => x.BenutzerId == Auth.UserId).ToListAsync();
+            }
         }
         showEditModal = false;
         StateHasChanged();
@@ -341,32 +349,39 @@ else
 
     private async Task AddRelationship()
     {
-        if (selectedPerson == null || newRelationshipPersonId == 0 || string.IsNullOrEmpty(newRelationshipType))
-            return;
-
-        var verwandtschaft = new Verwandtschaft
+        if (selectedPerson != null && newRelationshipPersonId > 0 && !string.IsNullOrEmpty(newRelationshipType))
         {
-            PersonAId = selectedPerson.Id,
-            PersonBId = newRelationshipPersonId,
-            Beziehungstyp = newRelationshipType
-        };
+            try
+            {
+                var verwandtschaft = new Verwandtschaft
+                {
+                    PersonAId = selectedPerson.Id,
+                    PersonBId = newRelationshipPersonId,
+                    Beziehungstyp = newRelationshipType
+                };
 
-        Db.Verwandtschaften.Add(verwandtschaft);
-        await Db.SaveChangesAsync();
+                Db.Verwandtschaften.Add(verwandtschaft);
+                await Db.SaveChangesAsync();
 
-        // Reload relationships
-        if (selectedPerson != null)
-        {
-            selectedPersonRelationships = await Db.Verwandtschaften
-                .Where(v => v.PersonAId == selectedPerson.Id || v.PersonBId == selectedPerson.Id)
-                .Include(v => v.PersonA)
-                .Include(v => v.PersonB)
-                .ToListAsync();
+                // Reload relationships
+                if (selectedPerson != null)
+                {
+                    selectedPersonRelationships = await Db.Verwandtschaften
+                        .Where(v => v.PersonAId == selectedPerson.Id || v.PersonBId == selectedPerson.Id)
+                        .Include(v => v.PersonA)
+                        .Include(v => v.PersonB)
+                        .ToListAsync();
+                }
+
+                newRelationshipPersonId = 0;
+                newRelationshipType = string.Empty;
+                StateHasChanged();
+            }
+            catch (Exception ex)
+            {
+                await JS.InvokeVoidAsync("console.error", $"Fehler beim Hinzufügen der Verwandtschaft: {ex.Message}");
+            }
         }
-
-        newRelationshipPersonId = 0;
-        newRelationshipType = string.Empty;
-        StateHasChanged();
     }
 
     private async Task DeleteRelationship(int relationshipId)

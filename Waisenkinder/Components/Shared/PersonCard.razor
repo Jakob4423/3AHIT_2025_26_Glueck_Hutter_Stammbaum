@@ -10,7 +10,7 @@
     <div class="card-body d-flex flex-column">
         <div class="d-flex align-items-start">
             @* Avatar mit erstem Buchstaben des Namens *@
-            <div class="me-3 avatar-placeholder">@Person.Name?[0]</div>
+            <div class="me-3 avatar-placeholder">@(string.IsNullOrEmpty(Person?.Name) ? string.Empty : Person.Name.Substring(0, 1))</div>
             <div class="flex-grow-1">
                 <h5 class="card-title mb-1">@Person.Name</h5>
                 <div class="text-muted small">@Person.Geburtsort — @Person.Geburtsdatum</div>

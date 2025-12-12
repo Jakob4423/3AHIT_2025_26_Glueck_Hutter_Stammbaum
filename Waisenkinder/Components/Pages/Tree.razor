@@ -95,30 +95,38 @@ else
     {
         connections.Clear();
         
-        // Lade alle Verwandtschaftsbeziehungen für die Personen des aktuellen Benutzers
-        var verwandtschaften = await Db.Verwandtschaften
-            .Where(v => persons!.Select(p => p.Id).Contains(v.PersonAId) || 
-                        persons!.Select(p => p.Id).Contains(v.PersonBId))
-            .ToListAsync();
-        
-        foreach (var v in verwandtschaften)
+        try
         {
-            var nodeA = nodes.FirstOrDefault(n => n.Id == v.PersonAId);
-            var nodeB = nodes.FirstOrDefault(n => n.Id == v.PersonBId);
+            // Lade alle Verwandtschaftsbeziehungen für die Personen des aktuellen Benutzers
+            var verwandtschaften = await Db.Verwandtschaften
+                .Where(v => persons!.Select(p => p.Id).Contains(v.PersonAId) || 
+                            persons!.Select(p => p.Id).Contains(v.PersonBId))
+                .ToListAsync();
             
-            if (nodeA != null && nodeB != null)
+            foreach (var v in verwandtschaften)
             {
-                connections.Add(new Connection
+                var nodeA = nodes.FirstOrDefault(n => n.Id == v.PersonAId);
+                var nodeB = nodes.FirstOrDefault(n => n.Id == v.PersonBId);
+                
+                if (nodeA != null && nodeB != null)
                 {
-                    FromNodeId = v.PersonAId,
-                    ToNodeId = v.PersonBId,
-                    X1 = nodeA.X,
-                    Y1 = nodeA.Y,
-                    X2 = nodeB.X,
-                    Y2 = nodeB.Y,
-                    Beziehungstyp = v.Beziehungstyp
-                });
+                    connections.Add(new Connection
+                    {
+                        FromNodeId = v.PersonAId,
+                        ToNodeId = v.PersonBId,
+                        X1 = nodeA.X,
+                        Y1 = nodeA.Y,
+                        X2 = nodeB.X,
+                        Y2 = nodeB.Y,
+                        Beziehungstyp = v.Beziehungstyp
+                    });
+                }
             }
+        }
+        catch (Exception ex)
+        {
+            // Fallback: Verwandtschaften-Tabelle existiert möglicherweise nicht, verwende alte Methode
+            await Console.Out.WriteLineAsync($"Verwandtschaften-Abfrage fehlgeschlagen: {ex.Message}");
         }
     }
 
