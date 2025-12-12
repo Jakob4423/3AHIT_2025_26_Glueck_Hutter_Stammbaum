@@ -11,20 +11,13 @@ namespace ITP2Tree
     /// Data Transfer Object für die Benutzer-Erstellung über Test-API.
     /// Wird verwendet, um neue Benutzer programmatisch zu erstellen.
     /// </summary>
-    /// <remarks>
-    /// Dieses DTO ist nur für Entwicklungs- und Test-Zwecke gedacht.
-    /// In der Produktionsversion sollten diese Endpoints entfernt werden.
-    /// </remarks>
     public record CreateUserDto(string Email, string Name, string Password);
 
     /// <summary>
     /// Data Transfer Object für die Person-Erstellung über Test-API.
     /// Wird verwendet, um neue Familienmitglieder programmatisch zu erstellen.
     /// </summary>
-    /// <remarks>
-    /// Dieses DTO ist nur für Entwicklungs- und Test-Zwecke gedacht.
-    /// In der Produktionsversion sollten diese Endpoints entfernt werden.
-    /// </remarks>
+   
     public record CreatePersonDto(int UserId, string Name, string Geburtsort, string Geburtsdatum, string Verwandte, string? Notizen);
 
     /// <summary>
@@ -132,7 +125,7 @@ namespace ITP2Tree
             app.MapBlazorHub();
             app.MapFallbackToPage("/_Host");
 
-            // Starte die Webanwendung und höre auf Anfragen
+            // Startet die Webanwendung
             app.Run();
         }
     }
