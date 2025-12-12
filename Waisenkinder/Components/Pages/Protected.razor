@@ -43,12 +43,15 @@ else
     }
     else
     {
-        <div class="person-grid" style="position:relative;">
+        <div class="person-grid">
             @foreach (var p in FilteredPersons)
             {
-                <div style="position: relative;">
+                <div style="position: relative; isolation: isolate;">
                     <PersonCard Person="p" OnEdit="OpenEditModal" OnDelete="RequestDeletePerson" />
-                    <button type="button" class="btn btn-sm btn-outline-info" style="position: absolute; top: 5px; right: 5px; z-index:10;" @onclick="() => OpenRelationshipModal(p)" title="Verwandtschaften verwalten">👥</button>
+                    <button type="button" class="btn btn-sm btn-outline-info" 
+                            style="position: absolute; top: 8px; right: 8px; z-index: 999; pointer-events: auto;" 
+                            @onclick="() => OpenRelationshipModal(p)" 
+                            title="Verwandtschaften verwalten">👥</button>
                 </div>
             }
         </div>
