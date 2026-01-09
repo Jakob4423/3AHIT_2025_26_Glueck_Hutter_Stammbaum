@@ -10,15 +10,12 @@
 
     <main>
         <div class="top-row px-4 d-flex align-items-center">
+            <button class="btn btn-link me-3" @onclick="GoBack" title="Zurück">←</button>
             <AuthorizeView>
                 <Authorized Context="authContext">
                     <button class="btn btn-link me-3" @onclick="StartTree" title="Starten">Starten</button>
                 </Authorized>
             </AuthorizeView>
-            @if (showBack)
-            {
-                <button class="btn btn-link me-3" @onclick="GoBack" title="Zurück">←</button>
-            }
             <!-- top-row content (right side) kept minimal -->
         </div>
 
@@ -31,21 +28,13 @@
 <!-- Blazor error UI removed: errors will be handled by the app's Error page -->
 
 @code {
-    private async Task GoBack()
+    private void GoBack()
     {
-        await JS.InvokeVoidAsync("TreeEditor.goBack");
+        Nav.NavigateTo("/");
     }
-    private bool showBack;
 
     private void StartTree()
     {
         Nav.NavigateTo("/tree");
-    }
-
-    protected override void OnParametersSet()
-    {
-        // If the base-relative path is empty, we're on home — hide back button
-        var relative = Nav.ToBaseRelativePath(Nav.Uri);
-        showBack = !string.IsNullOrEmpty(relative);
     }
 }

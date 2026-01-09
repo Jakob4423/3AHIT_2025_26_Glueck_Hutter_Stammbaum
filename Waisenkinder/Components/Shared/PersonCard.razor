@@ -10,10 +10,10 @@
     <div class="card-body d-flex flex-column">
         <div class="d-flex align-items-start">
             @* Avatar mit erstem Buchstaben des Namens *@
-            <div class="me-3 avatar-placeholder">@(string.IsNullOrEmpty(Person?.Name) ? string.Empty : Person.Name.Substring(0, 1))</div>
+            <div class="me-3 avatar-placeholder">@(string.IsNullOrEmpty(Person?.Name) ? string.Empty : Person!.Name.Substring(0, 1))</div>
             <div class="flex-grow-1">
-                <h5 class="card-title mb-1">@Person.Name</h5>
-                <div class="text-muted small">@Person.Geburtsort — @Person.Geburtsdatum</div>
+                <h5 class="card-title mb-1">@Person?.Name</h5>
+                <div class="text-muted small">@Person?.Geburtsort — @Person?.Geburtsdatum</div>
             </div>
             @* Edit/Delete Buttons *@
             <div class="ms-2 text-end">
@@ -29,17 +29,17 @@
         </div>
 
         @* Verwandte - falls vorhanden *@
-        @if (!string.IsNullOrWhiteSpace(Person.Verwandte))
+        @if (!string.IsNullOrWhiteSpace(Person?.Verwandte))
         {
             <div class="mt-3">
-                <strong>Verwandte:</strong> <span class="small">@Person.Verwandte</span>
+                <strong>Verwandte:</strong> <span class="small">@Person!.Verwandte</span>
             </div>
         }
 
         @* Notizen - falls vorhanden *@
-        @if (!string.IsNullOrWhiteSpace(Person.Notizen))
+        @if (!string.IsNullOrWhiteSpace(Person?.Notizen))
         {
-            <div class="mt-2 text-muted small">@Person.Notizen</div>
+            <div class="mt-2 text-muted small">@Person!.Notizen</div>
         }
     </div>
 </div>

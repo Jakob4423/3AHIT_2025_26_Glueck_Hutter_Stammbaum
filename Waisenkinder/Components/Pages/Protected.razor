@@ -170,6 +170,11 @@ else
         // Clear previous messages
         validationMessageStore?.Clear();
 
+        if (Auth.UserId is null)
+        {
+            return;
+        }
+
         // Count non-empty fields among the five information fields
         var filled = 0;
         if (!string.IsNullOrWhiteSpace(newPerson.Name)) filled++;
@@ -187,7 +192,7 @@ else
         }
 
         // assign owner and save
-        newPerson.BenutzerId = Auth.UserId!.Value;
+        newPerson.BenutzerId = Auth.UserId.Value;
         Db.Personen.Add(newPerson);
         await Db.SaveChangesAsync();
 
@@ -222,7 +227,10 @@ else
         {
             Db.Personen.Remove(p);
             await Db.SaveChangesAsync();
-            persons = await Db.Personen.Where(x => x.BenutzerId == Auth.UserId).ToListAsync();
+            if (Auth.UserId is not null)
+            {
+                persons = await Db.Personen.Where(x => x.BenutzerId == Auth.UserId.Value).ToListAsync();
+            }
             StateHasChanged();
         }
     }
@@ -251,7 +259,7 @@ else
     {
         await JS.InvokeVoidAsync("console.log", $"OnSaveEdited called for {p?.Name} (Id={p?.Id})");
         // attach and update
-        if (p != null)
+        if (p != null && Auth.UserId is not null)
         {
             var dbp = await Db.Personen.FindAsync(p.Id);
             if (dbp != null)
@@ -262,7 +270,7 @@ else
                 dbp.Verwandte = p.Verwandte;
                 dbp.Notizen = p.Notizen;
                 await Db.SaveChangesAsync();
-                persons = await Db.Personen.Where(x => x.BenutzerId == Auth.UserId).ToListAsync();
+                persons = await Db.Personen.Where(x => x.BenutzerId == Auth.UserId.Value).ToListAsync();
             }
         }
         showEditModal = false;
@@ -288,9 +296,9 @@ else
         if (personToDelete is not null)
         {
             await OnDeletePerson(personToDelete);
+            personToDelete = null;
         }
         showConfirmDelete = false;
-        personToDelete = null;
     }
 
     private void CancelDelete()

@@ -73,6 +73,6 @@ Waisenkinder/
 - Hutter
 - Glück
 
-**Klasse:** 3AHIT, HTL Villach  
+**Klasse:** 3AHIT, HTL Weiz  
 **Projektstart:** Dezember 2025  
 **Projektende:** 9. Januar 2026

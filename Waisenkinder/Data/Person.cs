@@ -35,11 +35,10 @@ namespace ITP2Tree.Data
         public string Name { get; set; } = string.Empty;
 
         /// <summary>
-        /// Geburtsort der Person. Nur Buchstaben, Leerzeichen und Bindestriche erlaubt.
+        /// Geburtsort der Person. Nur Buchstaben, Leerzeichen und Bindestriche erlaubt. Optional.
         /// </summary>
-        [Required]
         [RegularExpression(@"^[A-Za-zÄÖÜäöüß\s\-]+$", ErrorMessage = "Geburtsort darf nur Buchstaben, Leerzeichen und Bindestriche enthalten.")]
-        public string Geburtsort { get; set; } = string.Empty;
+        public string? Geburtsort { get; set; }
 
         /// <summary>
         /// Geburtsdatum als String (Format: z. B. 12.12.2000). Nur Zahlen und Punkte erlaubt.
@@ -49,11 +48,10 @@ namespace ITP2Tree.Data
         public string Geburtsdatum { get; set; } = string.Empty;
 
         /// <summary>
-        /// Bekannte Verwandte, als komma-getrennte Liste. Erlaubte Zeichen: Buchstaben, Leerzeichen, Kommas, Bindestriche.
+        /// Bekannte Verwandte, als komma-getrennte Liste. Erlaubte Zeichen: Buchstaben, Leerzeichen, Kommas, Bindestriche. Optional.
         /// </summary>
-        [Required]
         [RegularExpression(@"^[A-Za-zÄÖÜäöüß\s\-,|:]+$", ErrorMessage = "Verwandte dürfen nur Buchstaben, Leerzeichen, Kommas, Bindestriche, Doppelpunkte und Pipes enthalten.")]
-        public string Verwandte { get; set; } = string.Empty;
+        public string? Verwandte { get; set; }
 
         /// <summary>
         /// Optionale Notizen zu dieser Person. Kann null sein.
